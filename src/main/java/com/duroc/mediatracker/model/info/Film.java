@@ -25,6 +25,7 @@ public class Film {
 
     private int releaseYear;
 
+    @Column(name="duration_minutes")
     private int duration;
 
     @Enumerated(EnumType.STRING)
@@ -36,5 +37,4 @@ public class Film {
 
     private String language;
 
-//- Age Rating
 }
