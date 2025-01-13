@@ -17,21 +17,21 @@ public class Episode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn (name="show_id")
     @JsonBackReference
-    Show show;
+    private Show show;
 
-    String title;
+    private String title;
 
-    String description;
+    private String description;
 
-    int season;
+    private int season;
 
-    int episodeNumber;
+    private int episodeNumber;
 
-    int runtime;
+    private int runtime;
 
 }

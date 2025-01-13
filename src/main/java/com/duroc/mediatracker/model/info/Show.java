@@ -19,31 +19,31 @@ public class Show {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String title;
+    private String title;
 
-    String synopsis;
+    private String synopsis;
 
-    int releaseYear;
+    private int releaseYear;
 
-    int finishedYear;
+    private int finishedYear;
 
-    boolean isComplete;
+    private boolean isComplete;
 
     @Enumerated(EnumType.STRING)
-    List<TvGenres> genres;
+    private List<TvGenres> genres;
 
-    int numberOfSeasons;
+    private int numberOfSeasons;
 
-    int numberOfEpisodes;
+    private int numberOfEpisodes;
 
-    String country;
+    private String country;
 
-    String language;
+    private String language;
 
     @OneToMany(mappedBy = "episodes", cascade = CascadeType.ALL)
     @JsonManagedReference
-    List<Episode> episodes;
+    private List<Episode> episodes;
 
 }

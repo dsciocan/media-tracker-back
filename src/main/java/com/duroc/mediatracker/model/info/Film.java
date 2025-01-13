@@ -17,24 +17,24 @@ import java.util.List;
 public class Film {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String title;
+    private String title;
 
-    String synopsis;
+    private String synopsis;
 
-    int releaseYear;
+    private int releaseYear;
 
-    int duration;
+    private int duration;
 
     @Enumerated(EnumType.STRING)
-    List<FilmGenres> genres;
+    private List<FilmGenres> genres;
 
-    String director;
+    private String director;
 
-    String country;
+    private String country;
 
-    String language;
+    private String language;
 
 //- Age Rating
 }
