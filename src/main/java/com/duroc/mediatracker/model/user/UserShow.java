@@ -1,6 +1,5 @@
 package com.duroc.mediatracker.model.user;
 
-import com.duroc.mediatracker.model.info.Film;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +13,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Data
-@Table(name="user_films")
-public class UserFilm {
+@Table(name="user_shows")
+public class UserShow {
+
 
     @EmbeddedId
-    private UserFilmId userFilmId;
+    private UserShowId userShowId;
 
     private int rating;
 
@@ -27,5 +27,8 @@ public class UserFilm {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private LocalDate watchedDate;
+    private LocalDate dateStarted;
+
+    private LocalDate dateCompleted;
+
 }
