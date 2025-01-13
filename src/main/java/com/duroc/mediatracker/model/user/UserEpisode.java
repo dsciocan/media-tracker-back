@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Data
-@Table(name="user_episodes")
+@Table(name="users_episodes")
 public class UserEpisode {
 
     @EmbeddedId
