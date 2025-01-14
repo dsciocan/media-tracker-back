@@ -29,6 +29,7 @@ public class UserEpisode {
     private LocalDate watchedDate;
 
     @ManyToOne
-    @JoinColumn(name = "show_id")
+    @JoinColumn(name = "show_user_id")
+    @JoinColumn(name = "show_tv_id")
     private UserShow userShow;
 }
