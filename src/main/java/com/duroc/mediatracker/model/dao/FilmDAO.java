@@ -1,6 +1,7 @@
 package com.duroc.mediatracker.model.dao;
 
 import com.duroc.mediatracker.ExternalApiConfig;
+import com.duroc.mediatracker.model.film_details.FilmDetails;
 import com.duroc.mediatracker.model.film_search.FilmSearchResults;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,5 +26,21 @@ public class FilmDAO {
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         results = mapper.readValue(response.body(), FilmSearchResults.class);
         return results;
-}
+    }
+
+    public static FilmDetails filmSearchDetails(Long movieID) throws IOException, InterruptedException {
+        String url = String.format("https://api.themoviedb.org/3/movie/%d?language=en-US", movieID);
+        ExternalApiConfig apiKey = new ExternalApiConfig();
+        FilmDetails results;
+        ObjectMapper mapper = new ObjectMapper();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("accept", "application/json")
+                .header("Authorization", String.format("Bearer %s", apiKey.getApiKey()))
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        results = mapper.readValue(response.body(), FilmDetails.class);
+        return results;
+    }
 }
