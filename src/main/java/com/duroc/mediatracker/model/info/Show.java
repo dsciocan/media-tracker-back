@@ -31,6 +31,7 @@ public class Show {
 
     private boolean isComplete;
 
+    @ElementCollection(targetClass = TvGenres.class)
     @Enumerated(EnumType.STRING)
     private List<TvGenres> genres;
 
@@ -42,7 +43,7 @@ public class Show {
 
     private String language;
 
-    @OneToMany(mappedBy = "episodes", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Episode> episodes;
 
