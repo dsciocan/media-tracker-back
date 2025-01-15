@@ -1,6 +1,7 @@
 package com.duroc.mediatracker.service;
 
 import com.duroc.mediatracker.model.dao.FilmDAO;
+import com.duroc.mediatracker.model.film_details.FilmDetails;
 import com.duroc.mediatracker.model.film_search.FilmSearchResults;
 import com.duroc.mediatracker.model.film_search.Result;
 import com.duroc.mediatracker.repository.FilmRepository;
@@ -33,5 +34,14 @@ public class FilmServiceImplementation implements FilmService{
                 .toList();
 
         return new FilmSearchResults(updatedResults, searchResults.total_results());
+    }
+
+    @Override
+    public FilmDetails getFilmDetails(Long movieID) throws IOException, InterruptedException {
+        FilmDetails filmDetails = filmDAO.filmSearchDetails(movieID);
+        String fullPosterPath = BASE_IMAGE_URL + filmDetails.poster_path();
+        return new FilmDetails(filmDetails.genres(), filmDetails.original_language(), filmDetails.overview(),
+                fullPosterPath, filmDetails.production_companies(), filmDetails.release_date(), filmDetails.runtime(), filmDetails.title()
+        );
     }
 }
