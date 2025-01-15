@@ -107,6 +107,16 @@ public class ShowServiceImplementation implements ShowService {
     }
 
     @Override
+    public Show getSavedShow(Long id) {
+        if(showRepository.findById(id).isPresent()) {
+            return showRepository.findById(id).get();
+        } else {
+            return null;
+        }
+    }
+
+
+    @Override
     public String deleteShowFromDb(Long id) {
         if(showRepository.existsById(id)) {
             showRepository.deleteById(id);
