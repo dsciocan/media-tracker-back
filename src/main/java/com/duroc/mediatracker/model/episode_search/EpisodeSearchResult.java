@@ -5,5 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record EpisodeSearchResult(List<Result> episodes) {
+public record EpisodeSearchResult(
+        List<Result> episodes,
+        int season_number) {
 }
