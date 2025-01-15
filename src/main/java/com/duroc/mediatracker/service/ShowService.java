@@ -8,10 +8,11 @@ import java.io.IOException;
 
 public interface ShowService {
     ShowSearchResult getShowSearchResults(String query) throws IOException, InterruptedException;
-    ShowDetails getShowDetails(Long id) throws IOException, InterruptedException;
+    ShowDetails getShowDetails(Long apiId) throws IOException, InterruptedException;
 
 
 //    Show getShowDetails2(Long id) throws IOException, InterruptedException;
 
-    Show saveShowDetails(Long id) throws IOException, InterruptedException;
+    Show saveShowDetails(Long apiId) throws IOException, InterruptedException;
+    String deleteShowFromDb(Long id);
 }

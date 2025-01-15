@@ -38,8 +38,8 @@ public class ShowServiceImplementation implements ShowService {
     }
 
     @Override
-    public ShowDetails getShowDetails(Long id) throws IOException, InterruptedException {
-       ShowDetails showDetails =  ShowDAO.requestShowDetails(id);
+    public ShowDetails getShowDetails(Long apiId) throws IOException, InterruptedException {
+       ShowDetails showDetails =  ShowDAO.requestShowDetails(apiId);
        String url = "https://image.tmdb.org/t/p/original" + showDetails.getPoster_path();
        showDetails.setPoster_path(url);
        return showDetails;
@@ -105,4 +105,16 @@ public class ShowServiceImplementation implements ShowService {
         showRepository.save(savedShow);
         return savedShow;
     }
+
+    @Override
+    public String deleteShowFromDb(Long id) {
+        if(showRepository.existsById(id)) {
+            showRepository.deleteById(id);
+            return "Success";
+        } else {
+            return "Show with specified id could not be found";
+        }
+    }
+
+
 }
