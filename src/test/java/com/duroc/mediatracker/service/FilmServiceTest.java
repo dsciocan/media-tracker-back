@@ -1,6 +1,9 @@
 package com.duroc.mediatracker.service;
 
 import com.duroc.mediatracker.model.dao.FilmDAO;
+import com.duroc.mediatracker.model.film_details.FilmDetails;
+import com.duroc.mediatracker.model.film_details.Genre;
+import com.duroc.mediatracker.model.film_details.ProductionCompany;
 import com.duroc.mediatracker.model.film_search.Result;
 import com.duroc.mediatracker.model.film_search.FilmSearchResults;
 import com.duroc.mediatracker.repository.FilmRepository;
@@ -47,6 +50,36 @@ class FilmServiceTest {
         // assert
         assertEquals(1, result.total_results());
         assertEquals("Zyzzyx Road", result.results().get(0).title());
+    }
+
+    @Test
+    void testGetFilmDetails() throws IOException, InterruptedException {
+        Long movieId = 12345L;
+        FilmDetails mockFilmDetails = new FilmDetails(
+                List.of(new Genre("Action")),
+                "en",
+                "An action-packed adventure.",
+                "/sample_poster_path.jpg",
+                List.of(new ProductionCompany("Sample Production")),
+                "2023-01-01",
+                120,
+                "Sample Movie"
+        );
+
+        // Mocking the DAO call
+        when(filmDAO.filmSearchDetails(movieId)).thenReturn(mockFilmDetails);
+
+        // Act
+        FilmDetails actualDetails = filmServiceImplementation.getFilmDetails(movieId);
+
+        // Assert
+        assertAll(()->{
+            assertEquals("Sample Movie", actualDetails.title());
+            assertEquals("An action-packed adventure.", actualDetails.overview());
+            assertEquals("2023-01-01", actualDetails.release_date());
+            assertEquals(120, actualDetails.runtime());
+            assertEquals("Action", actualDetails.genres().get(0).name());
+        });
     }
 
 }
