@@ -41,4 +41,9 @@ public class ShowController {
         return new ResponseEntity<>(savedShow, HttpStatus.OK);
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteShow(@PathVariable Long id) {
+        return new ResponseEntity<>(showService.deleteShowFromDb(id), HttpStatus.OK);
+    }
 }
