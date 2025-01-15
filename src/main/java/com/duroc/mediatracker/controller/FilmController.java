@@ -1,6 +1,7 @@
 package com.duroc.mediatracker.controller;
 
 
+import com.duroc.mediatracker.model.film_details.FilmDetails;
 import com.duroc.mediatracker.model.film_search.FilmSearchResults;
 import com.duroc.mediatracker.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,12 @@ public class FilmController {
     public ResponseEntity<FilmSearchResults> getFilmSearchResults(@PathVariable String query) throws IOException, InterruptedException {
         FilmSearchResults filmSearchResults = filmService.getFilmSearchResults(query);
         return new ResponseEntity<>(filmSearchResults, HttpStatus.OK);
+    }
+
+    @GetMapping("/details/{movieID}")
+    public ResponseEntity<FilmDetails> getFilmDetails(@PathVariable Long movieID) throws IOException, InterruptedException {
+        FilmDetails filmDetails = filmService.getFilmDetails(movieID);
+        return new ResponseEntity<>(filmDetails,HttpStatus.OK);
     }
 
 
