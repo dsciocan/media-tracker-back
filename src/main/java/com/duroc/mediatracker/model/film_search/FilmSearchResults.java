@@ -5,5 +5,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record FilmSearchResults(List<Result> results) {
+public record FilmSearchResults(List<Result> results, int total_results) {
 }
