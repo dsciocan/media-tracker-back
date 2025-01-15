@@ -41,6 +41,11 @@ public class ShowController {
         return new ResponseEntity<>(savedShow, HttpStatus.OK);
     }
 
+    @GetMapping("/saved/{id}")
+    public ResponseEntity<Show> getSavedShowById(@PathVariable Long id) {
+        return new ResponseEntity<>(showService.getSavedShow(id), HttpStatus.OK);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteShow(@PathVariable Long id) {
