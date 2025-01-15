@@ -28,6 +28,7 @@ public class Film {
     @Column(name="duration_minutes")
     private int duration;
 
+    @ElementCollection(targetClass = FilmGenres.class)
     @Enumerated(EnumType.STRING)
     private List<FilmGenres> genres;
 
