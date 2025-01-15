@@ -19,5 +19,6 @@ public record ShowDetails(
                           int number_of_seasons,
                           List<String> origin_country,
                           String original_language,
-                          String overview) {
+                          String overview,
+                          String poster_path) {
 }
