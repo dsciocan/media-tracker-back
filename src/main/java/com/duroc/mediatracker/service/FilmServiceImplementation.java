@@ -40,7 +40,7 @@ public class FilmServiceImplementation implements FilmService{
     public FilmDetails getFilmDetails(Long movieID) throws IOException, InterruptedException {
         FilmDetails filmDetails = filmDAO.filmSearchDetails(movieID);
         String fullPosterPath = BASE_IMAGE_URL + filmDetails.poster_path();
-        return new FilmDetails(filmDetails.genres(), filmDetails.original_language(), filmDetails.overview(),
+        return new FilmDetails(filmDetails.genres(), filmDetails.original_language(),filmDetails.origin_country() ,filmDetails.overview(),
                 fullPosterPath, filmDetails.production_companies(), filmDetails.release_date(), filmDetails.runtime(), filmDetails.title()
         );
     }

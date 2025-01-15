@@ -58,6 +58,7 @@ class FilmServiceTest {
         FilmDetails mockFilmDetails = new FilmDetails(
                 List.of(new Genre("Action")),
                 "en",
+                List.of("US"),
                 "An action-packed adventure.",
                 "/sample_poster_path.jpg",
                 List.of(new ProductionCompany("Sample Production")),
