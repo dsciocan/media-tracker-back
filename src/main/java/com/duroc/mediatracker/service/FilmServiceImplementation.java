@@ -74,4 +74,12 @@ public class FilmServiceImplementation implements FilmService{
         return filmRepository.findById(Id);
     }
 
+    @Override
+    public void deleteFilmById(Long Id) {
+        if (!filmRepository.existsById(Id)) {
+            throw new RuntimeException("Film Not Found");
+        }
+        filmRepository.deleteById(Id);
+    }
+
 }

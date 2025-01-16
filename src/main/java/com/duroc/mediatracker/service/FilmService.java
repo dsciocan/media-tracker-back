@@ -15,4 +15,6 @@ public interface FilmService {
     Film addFilmToList(Long MovieId) throws IOException, InterruptedException;
 
     Optional<Film> getFilmById(Long Id);
+
+    void deleteFilmById(Long Id);
 }
