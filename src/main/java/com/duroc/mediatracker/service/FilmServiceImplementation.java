@@ -4,6 +4,9 @@ import com.duroc.mediatracker.model.dao.FilmDAO;
 import com.duroc.mediatracker.model.film_details.FilmDetails;
 import com.duroc.mediatracker.model.film_search.FilmSearchResults;
 import com.duroc.mediatracker.model.film_search.Result;
+import com.duroc.mediatracker.model.film_details.Genre;
+import com.duroc.mediatracker.model.film_details.ProductionCompany;
+import com.duroc.mediatracker.model.info.Film;
 import com.duroc.mediatracker.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,4 +47,25 @@ public class FilmServiceImplementation implements FilmService{
                 fullPosterPath, filmDetails.production_companies(), filmDetails.release_date(), filmDetails.runtime(), filmDetails.title()
         );
     }
+
+    @Override
+    public Film addFilmToList(Long MovieId) throws IOException, InterruptedException {
+        FilmDetails filmDetails = getFilmDetails(MovieId);
+        Film film = Film.builder()
+                .title(filmDetails.title())
+                .synopsis(filmDetails.overview())
+                .releaseYear(Integer.parseInt(filmDetails.release_date().split("-")[0]))
+                .duration(filmDetails.runtime())
+                .genres(filmDetails.genres().stream().map(Genre::name).toList())
+                .productionCompanies(filmDetails.production_companies().stream()
+                        .map(ProductionCompany::name)
+                        .toList())
+                .language(filmDetails.original_language())
+                .country(filmDetails.origin_country().getFirst())
+                .poster_url(filmDetails.poster_path())
+                .build();
+
+        return filmRepository.save(film);
+    }
+
 }
