@@ -44,4 +44,9 @@ public class FilmController {
                 .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @DeleteMapping("/delete/{Id}")
+    public ResponseEntity<String> deleteFilmById(@PathVariable Long Id) {
+        filmService.deleteFilmById(Id);
+        return new ResponseEntity<>("Film successfully deleted", HttpStatus.OK);
+    }
 }
