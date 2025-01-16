@@ -3,6 +3,7 @@ package com.duroc.mediatracker.controller;
 
 import com.duroc.mediatracker.model.film_details.FilmDetails;
 import com.duroc.mediatracker.model.film_search.FilmSearchResults;
+import com.duroc.mediatracker.model.info.Film;
 import com.duroc.mediatracker.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,10 +31,10 @@ public class FilmController {
         return new ResponseEntity<>(filmDetails,HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public String addFilmToList(@RequestBody Long movieID) throws IOException, InterruptedException {
-        filmService.addFilmToList(movieID);
-        return "Film added to list successfully.";
+    @PostMapping("/save")
+    public ResponseEntity<Film> addFilmToList(@RequestBody Long movieID) throws IOException, InterruptedException {
+        Film savedFilm = filmService.addFilmToList(movieID);
+        return new ResponseEntity<>(savedFilm, HttpStatus.CREATED);
     }
 
 }
