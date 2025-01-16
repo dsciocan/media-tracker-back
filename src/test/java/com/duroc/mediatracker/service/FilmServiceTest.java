@@ -6,17 +6,20 @@ import com.duroc.mediatracker.model.film_details.Genre;
 import com.duroc.mediatracker.model.film_details.ProductionCompany;
 import com.duroc.mediatracker.model.film_search.Result;
 import com.duroc.mediatracker.model.film_search.FilmSearchResults;
+import com.duroc.mediatracker.model.info.Film;
 import com.duroc.mediatracker.repository.FilmRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @DataJpaTest
 class FilmServiceTest {
@@ -29,6 +32,10 @@ class FilmServiceTest {
 
     @InjectMocks
     FilmServiceImplementation filmServiceImplementation;
+
+    public FilmServiceTest() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void testGetFilmSearchResults() throws IOException, InterruptedException {
@@ -54,7 +61,7 @@ class FilmServiceTest {
 
     @Test
     void testGetFilmDetails() throws IOException, InterruptedException {
-        Long movieId = 12345L;
+        Long movieId = 123L;
         FilmDetails mockFilmDetails = new FilmDetails(
                 List.of(new Genre("Action")),
                 "en",
@@ -81,6 +88,75 @@ class FilmServiceTest {
             assertEquals(120, actualDetails.runtime());
             assertEquals("Action", actualDetails.genres().get(0).name());
         });
+    }
+    @Test
+    void testAddFilmToList() throws IOException, InterruptedException {
+        // Arrange
+        Long movieId = 123L;
+
+        FilmDetails mockFilmDetails = new FilmDetails(
+                List.of(new Genre("Action")),
+                "en",
+                List.of("US"),
+                "An action-packed adventure.",
+                "/sample_poster_path.jpg",
+                List.of(new ProductionCompany("Sample Production")),
+                "2023-01-01",
+                120,
+                "Sample Movie"
+        );
+
+        Film savedFilm = Film.builder().id(1L).title("Sample Movie").synopsis("An action-packed adventure.").releaseYear(2023).duration(120).genres(List.of("Action"))
+                .productionCompanies(List.of("Sample Production")).language("en").country("US").poster_url("/sample_poster_path.jpg").build();
+
+        when(filmDAO.filmSearchDetails(movieId)).thenReturn(mockFilmDetails);
+        when(filmRepository.save(any(Film.class))).thenReturn(savedFilm);
+
+        // Act
+        Film result = filmServiceImplementation.addFilmToList(movieId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(savedFilm.getId(), result.getId());
+        assertEquals(savedFilm.getTitle(), result.getTitle());
+        assertEquals(savedFilm.getSynopsis(), result.getSynopsis());
+
+        verify(filmDAO, times(1)).filmSearchDetails(movieId);
+        verify(filmRepository, times(1)).save(any(Film.class));
+
+    }
+
+    @Test
+    void testGetFilmById() {
+        // Arrange
+        Long id = 1L;
+        Film savedFilm = Film.builder().id(1L).title("Sample Movie").synopsis("An action-packed adventure.").releaseYear(2023).duration(120).genres(List.of("Action"))
+                .productionCompanies(List.of("Sample Production")).language("en").country("US").poster_url("/sample_poster_path.jpg").build();
+
+        when(filmRepository.findById(id)).thenReturn(Optional.of(savedFilm));
+
+        // Act
+        Optional<Film> result = filmServiceImplementation.getFilmById(id);
+
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(savedFilm, result.get());
+        verify(filmRepository, times(1)).findById(id);
+    }
+
+    @Test
+    void testDeleteFilmById() {
+        // Arrange
+        Long id = 1L;
+
+        when(filmRepository.existsById(id)).thenReturn(true);
+
+        // Act
+        filmServiceImplementation.deleteFilmById(id);
+
+        // Assert
+        verify(filmRepository, times(1)).existsById(id);
+        verify(filmRepository, times(1)).deleteById(id);
     }
 
 }

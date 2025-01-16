@@ -3,6 +3,7 @@ package com.duroc.mediatracker.controller;
 
 import com.duroc.mediatracker.model.film_details.FilmDetails;
 import com.duroc.mediatracker.model.film_search.FilmSearchResults;
+import com.duroc.mediatracker.model.info.Film;
 import com.duroc.mediatracker.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,10 +31,22 @@ public class FilmController {
         return new ResponseEntity<>(filmDetails,HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public String addFilmToList(@RequestBody Long movieID) throws IOException, InterruptedException {
-        filmService.addFilmToList(movieID);
-        return "Film added to list successfully.";
+    @PostMapping("/save/{movieID}")
+    public ResponseEntity<Film> addFilmById(@PathVariable Long movieID) throws IOException, InterruptedException {
+        Film savedFilm = filmService.addFilmToList(movieID);
+        return new ResponseEntity<>(savedFilm, HttpStatus.CREATED);
     }
 
+    @GetMapping("/saved/{Id}")
+    public ResponseEntity<Film> getFilmById(@PathVariable Long Id) {
+        return filmService.getFilmById(Id)
+                .map(film->new ResponseEntity<>(film,HttpStatus.OK))
+                .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping("/delete/{Id}")
+    public ResponseEntity<String> deleteFilmById(@PathVariable Long Id) {
+        filmService.deleteFilmById(Id);
+        return new ResponseEntity<>("Film successfully deleted", HttpStatus.OK);
+    }
 }
