@@ -28,14 +28,14 @@ public class Film {
     @Column(name="duration_minutes")
     private int duration;
 
-    @ElementCollection(targetClass = FilmGenres.class)
-    @Enumerated(EnumType.STRING)
-    private List<FilmGenres> genres;
+    private List<String> genres;
 
-    private String director;
+    private List<String> productionCompanies;
 
     private String country;
 
     private String language;
+
+    private String poster_url;
 
 }
