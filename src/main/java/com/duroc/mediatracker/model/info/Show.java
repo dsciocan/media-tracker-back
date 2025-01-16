@@ -23,6 +23,7 @@ public class Show {
 
     private String title;
 
+    @Lob
     private String synopsis;
 
     private int releaseYear;
@@ -31,9 +32,11 @@ public class Show {
 
     private boolean isComplete;
 
-    @ElementCollection(targetClass = TvGenres.class)
-    @Enumerated(EnumType.STRING)
-    private List<TvGenres> genres;
+    private String posterUrl;
+
+//    @ElementCollection(targetClass = TvGenres.class)
+//    @Enumerated(EnumType.STRING)
+    private List<String> genres;
 
     private int numberOfSeasons;
 

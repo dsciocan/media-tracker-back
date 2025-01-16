@@ -26,9 +26,10 @@ public class Episode {
 
     private String title;
 
+    @Lob
     private String description;
 
-    private int season;
+    private int seasonNumber;
 
     private int episodeNumber;
 

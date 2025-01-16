@@ -22,9 +22,9 @@ class EpisodeRepositoryTest {
 
     @Test
     public void testRespository() {
-        Show sampleShow = Show.builder().title("test").synopsis("test").releaseYear(2024).finishedYear(2024).isComplete(true).genres(List.of(TvGenres.Action_Adventure, TvGenres.Comedy)).country("UK").language("English").numberOfEpisodes(8).numberOfEpisodes(1).episodes(null).build();
+        Show sampleShow = Show.builder().title("test").synopsis("test").releaseYear(2024).finishedYear(2024).isComplete(true).genres(List.of("Comedy", "Action")).country("UK").language("English").numberOfEpisodes(8).numberOfEpisodes(1).episodes(null).build();
         showRepository.save(sampleShow);
-        Episode sampleEpisode = Episode.builder().title("test").description("test").episodeNumber(1).runtime(100).season(1).show(sampleShow).build();
+        Episode sampleEpisode = Episode.builder().title("test").description("test").episodeNumber(1).runtime(100).seasonNumber(1).show(sampleShow).build();
 
         episodeRepository.save(sampleEpisode);
 

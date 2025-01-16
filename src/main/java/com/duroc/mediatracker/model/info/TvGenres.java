@@ -1,7 +1,6 @@
 package com.duroc.mediatracker.model.info;
 
 public enum TvGenres {
-
     Action_Adventure,
     Animation,
     Comedy,

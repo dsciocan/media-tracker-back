@@ -20,7 +20,7 @@ class ShowRepositoryTest {
     @Test
     public void testRespository() {
 
-        Show sampleShow = Show.builder().title("test").synopsis("test").releaseYear(2024).finishedYear(2024).isComplete(true).genres(List.of(TvGenres.Action_Adventure, TvGenres.Comedy)).country("UK").language("English").numberOfEpisodes(8).numberOfEpisodes(1).episodes(null).build();
+        Show sampleShow = Show.builder().title("test").synopsis("test").releaseYear(2024).finishedYear(2024).isComplete(true).genres(List.of("Comedy", "Action")).country("UK").language("English").numberOfEpisodes(8).numberOfEpisodes(1).episodes(null).build();
 
 
         showRepository.save(sampleShow);
