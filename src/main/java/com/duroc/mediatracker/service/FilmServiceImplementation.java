@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FilmServiceImplementation implements FilmService{
@@ -66,6 +67,11 @@ public class FilmServiceImplementation implements FilmService{
                 .build();
 
         return filmRepository.save(film);
+    }
+
+    @Override
+    public Optional<Film> getFilmById(Long Id) {
+        return filmRepository.findById(Id);
     }
 
 }
