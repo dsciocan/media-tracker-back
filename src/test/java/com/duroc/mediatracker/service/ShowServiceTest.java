@@ -1,5 +1,9 @@
 package com.duroc.mediatracker.service;
 
+import com.duroc.mediatracker.model.dao.ShowDAO;
+import com.duroc.mediatracker.model.info.Episode;
+import com.duroc.mediatracker.model.info.Show;
+import com.duroc.mediatracker.model.show_detail.ShowDetails;
 import com.duroc.mediatracker.model.show_search.Result;
 import com.duroc.mediatracker.model.show_search.ShowSearchResult;
 import com.duroc.mediatracker.repository.ShowRepository;
@@ -10,8 +14,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,6 +26,10 @@ class ShowServiceTest {
 
     @Mock
     ShowRepository showRepository;
+
+
+    @Mock
+    EpisodeService episodeService;
 
     @InjectMocks
     ShowServiceImplementation showServiceImplementation;
@@ -40,4 +50,48 @@ class ShowServiceTest {
         });
     }
 
+
+    @Test
+    @DisplayName("getShowDetails responds with the details of that show returned by the external api")
+    void testGetShowDetails() throws IOException, InterruptedException {
+
+        ShowDetails showDetails = showServiceImplementation.getShowDetails(1399L);
+
+        assertAll(() -> {
+            assertEquals("Game of Thrones", showDetails.getName());
+            assertEquals(3,showDetails.getGenres().size());
+            assertEquals(73, showDetails.getNumber_of_episodes());
+            assertEquals(8, showDetails.getNumber_of_seasons());
+        });
+    }
+
+    @Test
+    @DisplayName("saveShowDetails saves the details of a show returned by the external api to the database")
+    void testSaveShowDetails() throws IOException, InterruptedException {
+
+        Show savedShow = showServiceImplementation.saveShowDetails(1399L);
+
+        Show expectedShow = new Show(null, "Game of Thrones",
+                "Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
+                2011, 2019, true, "https://image.tmdb.org/t/p/original/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", List.of("Sci-Fi & Fantasy", "Drama", "Action & Adventure"), 8, 73, "US", "en", new ArrayList<>());
+        assertAll(() -> {
+            assertEquals(expectedShow, savedShow);
+        });
+    }
+
+    @Test
+    @DisplayName("getSavedShow returns the details of previously saved show")
+    void testGetSavedShow() throws IOException, InterruptedException {
+        Show savedShow = new Show(1L, "Game of Thrones",
+                "Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
+                2011, 2019, true, "https://image.tmdb.org/t/p/original/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", List.of("Sci-Fi & Fantasy", "Drama", "Action & Adventure"), 8, 73, "US", "en", List.of(new Episode()));
+
+        Mockito.when(showRepository.findById(1L)).thenReturn(Optional.of(savedShow));
+
+        Show retrievedShow = showServiceImplementation.getSavedShow(1L);
+
+                assertAll(() -> {
+            assertEquals(retrievedShow, savedShow);
+        });
+    }
 }
