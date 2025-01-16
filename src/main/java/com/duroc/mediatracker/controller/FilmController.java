@@ -31,8 +31,8 @@ public class FilmController {
         return new ResponseEntity<>(filmDetails,HttpStatus.OK);
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<Film> addFilmById(@RequestBody Long movieID) throws IOException, InterruptedException {
+    @PostMapping("/save/{movieID}")
+    public ResponseEntity<Film> addFilmById(@PathVariable Long movieID) throws IOException, InterruptedException {
         Film savedFilm = filmService.addFilmToList(movieID);
         return new ResponseEntity<>(savedFilm, HttpStatus.CREATED);
     }
