@@ -37,4 +37,11 @@ public class FilmController {
         return new ResponseEntity<>(savedFilm, HttpStatus.CREATED);
     }
 
+    @GetMapping("/saved/{Id}")
+    public ResponseEntity<Film> getFilmFromList(@PathVariable Long Id) {
+        return filmService.getFilmById(Id)
+                .map(film->new ResponseEntity<>(film,HttpStatus.OK))
+                .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 }
