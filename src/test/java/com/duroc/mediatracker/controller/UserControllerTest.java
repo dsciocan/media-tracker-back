@@ -1,5 +1,6 @@
 package com.duroc.mediatracker.controller;
 
+import com.duroc.mediatracker.model.user.AppUser;
 import com.duroc.mediatracker.service.ShowService;
 import com.duroc.mediatracker.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
