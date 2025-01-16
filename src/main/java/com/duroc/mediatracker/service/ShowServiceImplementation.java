@@ -83,13 +83,13 @@ public class ShowServiceImplementation implements ShowService {
         for(Genre genre : showDetails.getGenres()) {
             showGenres.add(genre.name());
         }
-
+        boolean isComplete = !showDetails.isIn_production();
         Show savedShow = Show.builder()
                 .title(showDetails.getName())
                 .synopsis(showDetails.getOverview())
                 .releaseYear(Integer.parseInt(showDetails.getFirst_air_date().substring(0,4)))
                 .finishedYear(Integer.parseInt(showDetails.getLast_air_date().substring(0,4)))
-                .isComplete(!showDetails.isIn_production())
+                .isComplete(isComplete)
                 .posterUrl(showDetails.getPoster_path())
                 .genres(showGenres)
                 .numberOfSeasons(showDetails.getNumber_of_seasons())
@@ -98,7 +98,6 @@ public class ShowServiceImplementation implements ShowService {
                 .language(showDetails.getOriginal_language())
                 .build();
         showRepository.save(savedShow);
-//        savedShow = showRepository.findById(savedShow.getId()).get();
         episodeService.saveEpisodes(showDetails.getId(), savedShow.getNumberOfSeasons(), savedShow);
         List<Episode> episodeList = episodeService.getSavedEpisodesByShowId(savedShow.getId());
         savedShow.setEpisodes(episodeList);
