@@ -45,12 +45,11 @@ class UserServiceTest {
     void testChangeUsername() {
 
         AppUser user = new AppUser(1L, 34459880L, "someone");
-
-        Mockito.when(userService.getUserById(1L)).thenReturn(user);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         String newUsername = "someone else";
         AppUser modifiedUser = new AppUser(1L, 34459880L, "someone else");
-
+        Mockito.when(userRepository.save(modifiedUser)).thenReturn(modifiedUser);
 
         assertEquals(modifiedUser, userService.changeUsername(1L, newUsername));
     }
@@ -59,7 +58,6 @@ class UserServiceTest {
     void testChangeUsername_nullUsername() {
 
         AppUser user = new AppUser(1L, 34459880L, "someone");
-
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         String newUsername = "";
@@ -67,7 +65,4 @@ class UserServiceTest {
         assertThrows(InvalidItemException.class, () -> userService.changeUsername(1L, newUsername));
     }
 
-    @Test
-    void testDeleteUser() {
-    }
 }
