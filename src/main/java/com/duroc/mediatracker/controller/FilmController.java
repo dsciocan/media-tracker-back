@@ -32,13 +32,13 @@ public class FilmController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Film> addFilmToList(@RequestBody Long movieID) throws IOException, InterruptedException {
+    public ResponseEntity<Film> addFilmById(@RequestBody Long movieID) throws IOException, InterruptedException {
         Film savedFilm = filmService.addFilmToList(movieID);
         return new ResponseEntity<>(savedFilm, HttpStatus.CREATED);
     }
 
     @GetMapping("/saved/{Id}")
-    public ResponseEntity<Film> getFilmFromList(@PathVariable Long Id) {
+    public ResponseEntity<Film> getFilmById(@PathVariable Long Id) {
         return filmService.getFilmById(Id)
                 .map(film->new ResponseEntity<>(film,HttpStatus.OK))
                 .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
