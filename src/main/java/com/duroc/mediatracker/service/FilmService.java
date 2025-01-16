@@ -5,6 +5,7 @@ import com.duroc.mediatracker.model.film_search.FilmSearchResults;
 import com.duroc.mediatracker.model.info.Film;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public interface FilmService {
     FilmSearchResults getFilmSearchResults(String query) throws IOException, InterruptedException;
@@ -12,4 +13,8 @@ public interface FilmService {
     FilmDetails getFilmDetails(Long movieID) throws IOException, InterruptedException;
 
     Film addFilmToList(Long MovieId) throws IOException, InterruptedException;
+
+    Optional<Film> getFilmById(Long Id);
+
+    void deleteFilmById(Long Id);
 }
