@@ -1,5 +1,7 @@
 package com.duroc.mediatracker.controller;
 
+import com.duroc.mediatracker.model.info.Episode;
+import com.duroc.mediatracker.model.info.Show;
 import com.duroc.mediatracker.model.show_detail.Genre;
 import com.duroc.mediatracker.model.show_detail.ShowDetails;
 import com.duroc.mediatracker.model.show_search.Result;
@@ -16,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -83,5 +86,53 @@ class ShowControllerTest {
 
     }
 
+    @Test
+    @DisplayName("POST save show details works as expected when the service returns an appropriate object")
+    public void testSaveShowDetails() throws Exception {
+
+        Show sampleShow = new Show(1L, "test", "test",
+                2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
+        Mockito.when(showService.saveShowDetails(9999999L)).thenReturn(sampleShow);
+
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.post("/api/v1/mediatracker/shows/save").contentType(MediaType.APPLICATION_JSON).content("9999999"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfEpisodes").value(200))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET saved show details works as expected when the service returns an appropriate object")
+    public void testGetSavedShowById() throws Exception {
+
+        Show sampleShow = new Show(1L, "test", "test",
+                2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
+
+        Mockito.when(showService.getSavedShow(1L)).thenReturn(sampleShow);
+
+
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/v1/mediatracker/shows/saved/1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfEpisodes").value(200))
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    @DisplayName("DELETE saved show works as expected when the service returns an appropriate response")
+    public void testDeleteSavedShowById() throws Exception {
+
+        Show sampleShow = new Show(1L, "test", "test",
+                2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
+
+        Mockito.when(showService.deleteShowFromDb(1L)).thenReturn("Success");
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/api/v1/mediatracker/shows/1"))
+                .andExpect(status().isOk());
+    }
 
 }
