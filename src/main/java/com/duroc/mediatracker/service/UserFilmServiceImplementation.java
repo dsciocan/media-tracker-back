@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class UserFilmServiceImplementation implements UserFilmService{
@@ -34,5 +35,11 @@ public class UserFilmServiceImplementation implements UserFilmService{
         userFilm.setUserFilmId(userFilmId);
 
         return userFilmRepository.save(userFilm);
+    }
+
+    @Override
+    public List<UserFilm> getAllUserFilms(Long userId) {
+        AppUser user = userService.getUserById(userId);
+        return userFilmRepository.findByUserFilmIdAppUser(user);
     }
 }
