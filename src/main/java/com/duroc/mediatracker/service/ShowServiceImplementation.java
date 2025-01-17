@@ -3,11 +3,9 @@ package com.duroc.mediatracker.service;
 import com.duroc.mediatracker.model.dao.ShowDAO;
 import com.duroc.mediatracker.model.info.Episode;
 import com.duroc.mediatracker.model.info.Show;
-import com.duroc.mediatracker.model.info.TvGenres;
 import com.duroc.mediatracker.model.show_detail.Genre;
 import com.duroc.mediatracker.model.show_detail.ShowDetails;
 import com.duroc.mediatracker.model.show_search.Result;
-import com.duroc.mediatracker.model.show_search.ShowSearchResult;
 import com.duroc.mediatracker.repository.ShowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ShowServiceImplementation implements ShowService {
@@ -28,9 +25,9 @@ public class ShowServiceImplementation implements ShowService {
 
 
     @Override
-    public ShowSearchResult getShowSearchResults(String query) throws IOException, InterruptedException {
-        ShowSearchResult showSearchResult = ShowDAO.requestShowSearchData(query);
-        for(Result result : showSearchResult.results()) {
+    public List<Result> getShowSearchResults(String query) throws IOException, InterruptedException {
+        List<Result> showSearchResult = ShowDAO.requestShowSearchData(query);
+        for(Result result : showSearchResult) {
             String url = "https://image.tmdb.org/t/p/original" + result.getPoster_path();
             result.setPoster_path(url);
         }
