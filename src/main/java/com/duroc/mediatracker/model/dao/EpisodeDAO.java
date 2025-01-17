@@ -2,7 +2,6 @@ package com.duroc.mediatracker.model.dao;
 
 import com.duroc.mediatracker.ExternalApiConfig;
 import com.duroc.mediatracker.model.episode_search.EpisodeSearchResult;
-import com.duroc.mediatracker.model.show_search.ShowSearchResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;

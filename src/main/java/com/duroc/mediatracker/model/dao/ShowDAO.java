@@ -3,7 +3,6 @@ package com.duroc.mediatracker.model.dao;
 import com.duroc.mediatracker.ExternalApiConfig;
 import com.duroc.mediatracker.model.show_detail.ShowDetails;
 import com.duroc.mediatracker.model.show_search.Result;
-import com.duroc.mediatracker.model.show_search.ShowSearchResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
