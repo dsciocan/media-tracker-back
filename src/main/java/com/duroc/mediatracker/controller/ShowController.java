@@ -2,7 +2,7 @@ package com.duroc.mediatracker.controller;
 
 import com.duroc.mediatracker.model.info.Show;
 import com.duroc.mediatracker.model.show_detail.ShowDetails;
-import com.duroc.mediatracker.model.show_search.ShowSearchResult;
+import com.duroc.mediatracker.model.show_search.Result;
 import com.duroc.mediatracker.service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/mediatracker/shows")
@@ -18,8 +19,8 @@ public class ShowController {
     ShowService showService;
 
     @GetMapping("/search/{searchQuery}")
-    public ResponseEntity<ShowSearchResult> getShowSearchResults(@PathVariable String searchQuery) throws IOException, InterruptedException {
-        ShowSearchResult searchResults = showService.getShowSearchResults(searchQuery);
+    public ResponseEntity<List<Result>> getShowSearchResults(@PathVariable String searchQuery) throws IOException, InterruptedException {
+        List<Result> searchResults = showService.getShowSearchResults(searchQuery);
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
 
