@@ -81,4 +81,18 @@ public class UserFilmServiceImplementation implements UserFilmService{
         return userFilmRepository.findById(userFilmId)
                 .orElseThrow(() -> new ItemNotFoundException("UserFilm not found"));
     }
+
+    @Override
+    public void deleteUserFilmById(Long userId, Long filmDbId) {
+        AppUser appUser = userService.getUserById(userId);
+
+        Film film = filmService.getFilmById(filmDbId).orElseThrow(() ->
+                new ItemNotFoundException("Film not found"));
+
+        UserFilmId userFilmId = new UserFilmId();
+        userFilmId.setAppUser(appUser);
+        userFilmId.setFilm(film);
+
+        userFilmRepository.deleteById(userFilmId);
+    }
 }

@@ -14,4 +14,6 @@ public interface UserFilmService {
     UserFilm updateUserFilm(UserFilm userFilm, Long userId, Long movieDbId);
 
     UserFilm getUserFilmById(Long userId, Long filmDbId);
+
+    void deleteUserFilmById(Long userId, Long filmDbId);
 }
