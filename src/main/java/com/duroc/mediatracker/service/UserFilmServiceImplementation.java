@@ -66,4 +66,19 @@ public class UserFilmServiceImplementation implements UserFilmService{
 
         return userFilmRepository.save(existingUserFilm);
     }
+
+    @Override
+    public UserFilm getUserFilmById(Long userId, Long filmDbId) {
+        AppUser appUser = userService.getUserById(userId);
+
+        Film film = filmService.getFilmById(filmDbId).orElseThrow(() ->
+                new ItemNotFoundException("Film not found"));
+
+        UserFilmId userFilmId = new UserFilmId();
+        userFilmId.setAppUser(appUser);
+        userFilmId.setFilm(film);
+
+        return userFilmRepository.findById(userFilmId)
+                .orElseThrow(() -> new ItemNotFoundException("UserFilm not found"));
+    }
 }

@@ -12,4 +12,6 @@ public interface UserFilmService {
     List<UserFilm> getAllUserFilms(Long userId);
 
     UserFilm updateUserFilm(UserFilm userFilm, Long userId, Long movieDbId);
+
+    UserFilm getUserFilmById(Long userId, Long filmDbId);
 }
