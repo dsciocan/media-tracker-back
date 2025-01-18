@@ -11,4 +11,8 @@ public interface UserShowService {
     UserShow saveShowToUserList(UserShow userShow, Long userId, Long apiShowId) throws IOException, InterruptedException;
 
     UserShow getUserShowByShowId(Long userId, Long showId);
+
+    List<UserShow> getUserShowsByWatchStatusAndOptionalGenre(Long userId, String status, String genre);
+
+    UserShow changeUserShowDetails(Long userId, Long showId, UserShow newUserShow);
 }
