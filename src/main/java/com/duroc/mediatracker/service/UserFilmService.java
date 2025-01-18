@@ -10,4 +10,6 @@ public interface UserFilmService {
     UserFilm saveUserFilm(UserFilm userFilm, Long userId, Long movieId) throws IOException, InterruptedException;
 
     List<UserFilm> getAllUserFilms(Long userId);
+
+    UserFilm updateUserFilm(UserFilm userFilm, Long userId, Long movieDbId);
 }
