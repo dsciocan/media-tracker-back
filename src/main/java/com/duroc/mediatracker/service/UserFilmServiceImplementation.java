@@ -3,6 +3,7 @@ package com.duroc.mediatracker.service;
 import com.duroc.mediatracker.Exception.ItemNotFoundException;
 import com.duroc.mediatracker.model.info.Film;
 import com.duroc.mediatracker.model.user.AppUser;
+import com.duroc.mediatracker.model.user.Status;
 import com.duroc.mediatracker.model.user.UserFilm;
 import com.duroc.mediatracker.model.user.UserFilmId;
 import com.duroc.mediatracker.repository.UserFilmRepository;
@@ -94,5 +95,11 @@ public class UserFilmServiceImplementation implements UserFilmService{
         userFilmId.setFilm(film);
 
         userFilmRepository.deleteById(userFilmId);
+    }
+
+    @Override
+    public List<UserFilm> getUserFilmsByStatus(Long userId, Status status) {
+        List<UserFilm> allUserFilms = getAllUserFilms(userId);
+        return allUserFilms.stream().filter(userFilm -> userFilm.getStatus().equals(status)).toList();
     }
 }

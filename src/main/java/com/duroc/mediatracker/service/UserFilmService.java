@@ -1,5 +1,6 @@
 package com.duroc.mediatracker.service;
 
+import com.duroc.mediatracker.model.user.Status;
 import com.duroc.mediatracker.model.user.UserFilm;
 
 import java.io.IOException;
@@ -16,4 +17,6 @@ public interface UserFilmService {
     UserFilm getUserFilmById(Long userId, Long filmDbId);
 
     void deleteUserFilmById(Long userId, Long filmDbId);
+
+    List<UserFilm> getUserFilmsByStatus(Long userId, Status status);
 }
