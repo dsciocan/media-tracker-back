@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -125,6 +126,25 @@ public class UserShowServiceImplementation implements  UserShowService {
             userShow.setRating(newUserShow.getRating());
             return userShowRepository.save(userShow);
         }
+    }
+
+    @Override
+    public HashMap<String, Integer> getNumberOfShowsWatchedByGenre(Long userId) {
+        List<UserShow> allShows = getAllShowsFromUserList(userId);
+        HashMap<String, Integer> showsByGenre = new HashMap<>();
+        for(UserShow userShow : allShows) {
+            if(userShow.getStatus().equalsIgnoreCase("Watched")) {
+                userShow.getUserShowId().getShow().getGenres().forEach((genre) ->
+                {
+                    if(showsByGenre.containsKey(genre)) {
+                        showsByGenre.put(genre, showsByGenre.get(genre) + 1);
+                    } else {
+                        showsByGenre.put(genre, 1);
+                    }
+                });
+            }
+        }
+        return showsByGenre;
     }
 
 }
