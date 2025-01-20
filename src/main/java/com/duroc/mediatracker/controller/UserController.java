@@ -1,9 +1,8 @@
 package com.duroc.mediatracker.controller;
 
-import com.duroc.mediatracker.model.user.AppUser;
-import com.duroc.mediatracker.model.user.UserEpisode;
-import com.duroc.mediatracker.model.user.UserShow;
+import com.duroc.mediatracker.model.user.*;
 import com.duroc.mediatracker.service.UserEpisodeService;
+import com.duroc.mediatracker.service.UserFilmService;
 import com.duroc.mediatracker.service.UserService;
 import com.duroc.mediatracker.service.UserShowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,9 @@ public class UserController {
 
     @Autowired
     UserEpisodeService userEpisodeService;
+
+    @Autowired
+    UserFilmService userFilmService;
 
     @GetMapping("/{userId}")
     public ResponseEntity<AppUser> getUserById(@PathVariable Long userId) {
@@ -90,5 +92,45 @@ public class UserController {
     public ResponseEntity<UserEpisode> changeUserEpisodeDetails(@PathVariable Long userId, @PathVariable Long episodeId,
                                                                 @RequestBody UserEpisode newUserEpisode) {
         return new ResponseEntity<>(userEpisodeService.changeUserEpisodeDetails(userId, episodeId, newUserEpisode), HttpStatus.OK);
+    }
+
+    // UserFilm methods
+    @PostMapping("/{userId}/{movieId}")
+    public ResponseEntity<UserFilm> saveUserFilm(@PathVariable Long userId, @PathVariable Long movieId, @RequestBody UserFilm userFilm) throws IOException, InterruptedException {
+        UserFilm savedUserFilm = userFilmService.saveUserFilm(userFilm, userId, movieId);
+        return new ResponseEntity<>(savedUserFilm, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<UserFilm>> getUserFilms(@PathVariable Long userId) {
+        List<UserFilm> userFilms = userFilmService.getAllUserFilms(userId);
+        return new ResponseEntity<>(userFilms,HttpStatus.OK);
+    }
+
+    @PatchMapping("/{userId}/{filmDbId}")
+    public ResponseEntity<UserFilm> updateUserFilm(@PathVariable Long userId, @PathVariable Long filmDbId, @RequestBody UserFilm updatedUserFilm) {
+        UserFilm userFilm = userFilmService.updateUserFilm(updatedUserFilm, userId, filmDbId);
+        return new ResponseEntity<>(userFilm, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/{filmDbId}")
+    public ResponseEntity<UserFilm> getUserFilmById(@PathVariable Long userId, @PathVariable Long filmDbId) {
+        UserFilm userFilm = userFilmService.getUserFilmById(userId, filmDbId);
+        return new ResponseEntity<>(userFilm, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}/{filmDbId}")
+    public ResponseEntity<String> deleteUserFilmById(@PathVariable Long userId, @PathVariable Long filmDbId) {
+        userFilmService.deleteUserFilmById(userId, filmDbId);
+        return new ResponseEntity<>("UserFilm successfully deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/search")
+    public ResponseEntity<?> getUserFilmsByStatus(@PathVariable Long userId, @RequestParam Status status) {
+        List<UserFilm> userFilms = userFilmService.getUserFilmsByStatus(userId, status);
+        if(userFilms.isEmpty()) {
+            return new ResponseEntity<>("No films found", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userFilms, HttpStatus.OK);
     }
 }
