@@ -17,8 +17,6 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long oAuthId;
-
-    private String username;
+    private String userToken;
 
 }
