@@ -78,4 +78,11 @@ public class UserServiceImplementation implements UserService{
         }
         return resultMap;
     }
+
+    @Override
+    public int totalRuntime(Long userId) {
+        int filmRuntime = userFilmService.getUserFilmRuntime(userId);
+        int showRuntime = userEpisodeService.getAllRuntimeWatched(userId);
+        return filmRuntime+showRuntime;
+    }
 }

@@ -11,4 +11,6 @@ public interface UserService {
     String deleteUser(Long userId);
 
     Map<String,Integer> getAllByGenre (Long userId);
+
+    int totalRuntime(Long userId);
 }
