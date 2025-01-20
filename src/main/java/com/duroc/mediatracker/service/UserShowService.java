@@ -3,6 +3,7 @@ package com.duroc.mediatracker.service;
 import com.duroc.mediatracker.model.user.UserShow;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 public interface UserShowService {
@@ -15,4 +16,6 @@ public interface UserShowService {
     List<UserShow> getUserShowsByWatchStatusAndOptionalGenre(Long userId, String status, String genre);
 
     UserShow changeUserShowDetails(Long userId, Long showId, UserShow newUserShow);
+
+    HashMap<String, Integer> getNumberOfShowsWatchedByGenre(Long userId);
 }
