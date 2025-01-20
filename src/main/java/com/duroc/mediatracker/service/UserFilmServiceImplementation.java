@@ -102,4 +102,10 @@ public class UserFilmServiceImplementation implements UserFilmService{
         List<UserFilm> allUserFilms = getAllUserFilms(userId);
         return allUserFilms.stream().filter(userFilm -> userFilm.getStatus().equals(status)).toList();
     }
+
+    @Override
+    public int getUserFilmRuntime(Long userId) {
+        List<UserFilm> watchedUserFilms = getUserFilmsByStatus(userId, Status.WATCHED);
+        return watchedUserFilms.stream().mapToInt(userFilm->userFilm.getUserFilmId().getFilm().getDuration()).sum();
+    }
 }
