@@ -1,5 +1,6 @@
 package com.duroc.mediatracker.service;
 
+import com.duroc.mediatracker.Exception.ItemNotFoundException;
 import com.duroc.mediatracker.model.dao.EpisodeDAO;
 import com.duroc.mediatracker.model.episode_search.EpisodeSearchResult;
 import com.duroc.mediatracker.model.episode_search.Result;
@@ -55,6 +56,14 @@ public class EpisodeServiceImplementation implements EpisodeService {
 
     }
 
+    @Override
+    public Episode getSavedEpisodeById(Long episodeId) {
+        if(episodeRepository.findById(episodeId).isPresent()) {
+            return episodeRepository.findById(episodeId).get();
+        } else {
+            throw new ItemNotFoundException("Could not find episode with specified id");
+        }
+    }
 
     @Override
     public List<Episode> getSavedEpisodesByShowId(Long showId) {
