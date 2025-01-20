@@ -19,4 +19,6 @@ public interface UserFilmService {
     void deleteUserFilmById(Long userId, Long filmDbId);
 
     List<UserFilm> getUserFilmsByStatus(Long userId, Status status);
+
+    int getUserFilmRuntime(Long userId);
 }
