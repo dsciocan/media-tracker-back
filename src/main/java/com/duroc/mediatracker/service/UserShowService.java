@@ -7,15 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface UserShowService {
-    List<UserShow> getAllShowsFromUserList(Long userId);
+    List<UserShow> getAllShowsFromUserList();
 
-    UserShow saveShowToUserList(UserShow userShow, Long userId, Long apiShowId) throws IOException, InterruptedException;
+    UserShow saveShowToUserList(UserShow userShow, Long apiShowId) throws IOException, InterruptedException;
 
-    UserShow getUserShowByShowId(Long userId, Long showId);
+    UserShow getUserShowByShowId(Long showId);
 
-    List<UserShow> getUserShowsByWatchStatusAndOptionalGenre(Long userId, String status, String genre);
+    List<UserShow> getUserShowsByWatchStatusAndOptionalGenre(String status, String genre);
 
-    UserShow changeUserShowDetails(Long userId, Long showId, UserShow newUserShow);
+    UserShow changeUserShowDetails(Long showId, UserShow newUserShow);
 
-    HashMap<String, Integer> getNumberOfShowsWatchedByGenre(Long userId);
+    HashMap<String, Integer> getNumberOfShowsWatchedByGenre();
 }

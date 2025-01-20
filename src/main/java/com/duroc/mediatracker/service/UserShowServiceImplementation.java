@@ -37,15 +37,15 @@ public class UserShowServiceImplementation implements  UserShowService {
     UserEpisodeService userEpisodeService;
 
     @Override
-    public List<UserShow> getAllShowsFromUserList(Long userId) {
-        AppUser user = userService.getUserById(userId);
+    public List<UserShow> getAllShowsFromUserList() {
+        AppUser user = userService.getUser();
         return userShowRepository.findByUserShowIdAppUser(user);
     }
 
 
     @Override
-    public UserShow saveShowToUserList(UserShow userShow, Long userId, Long showApiId) throws IOException, InterruptedException {
-        AppUser user = userService.getUserById(userId);
+    public UserShow saveShowToUserList(UserShow userShow, Long showApiId) throws IOException, InterruptedException {
+        AppUser user = userService.getUser();
         Show show = showService.saveShowDetails(showApiId);
         UserShowId userShowId = new UserShowId(user, show);
         userShow.setUserShowId(userShowId);
@@ -55,14 +55,14 @@ public class UserShowServiceImplementation implements  UserShowService {
             userShow.setDateStarted(LocalDate.now());
             userShow.setDateCompleted(LocalDate.now());
         }
-        userEpisodeService.saveAllShowEpisodesAsUserEpisodes(userId, show.getId());
+        userEpisodeService.saveAllShowEpisodesAsUserEpisodes(show.getId());
         return userShowRepository.save(userShow);
     }
 
 
     @Override
-    public UserShow getUserShowByShowId(Long userId, Long showId) {
-            AppUser user = userService.getUserById(userId);
+    public UserShow getUserShowByShowId(Long showId) {
+            AppUser user = userService.getUser();
             Show show = showService.getSavedShow(showId);
             UserShowId userShowId = new UserShowId(user, show);
             if(userShowRepository.findById(userShowId).isPresent()) {
@@ -82,8 +82,8 @@ public class UserShowServiceImplementation implements  UserShowService {
     }
 
     @Override
-    public List<UserShow> getUserShowsByWatchStatusAndOptionalGenre(Long userId, String status, String genre) {
-        List<UserShow> userShows = getAllShowsFromUserList(userId);
+    public List<UserShow> getUserShowsByWatchStatusAndOptionalGenre(String status, String genre) {
+        List<UserShow> userShows = getAllShowsFromUserList();
         List<UserShow> filteredList = new ArrayList<>();
         String validatedGenre = genreValidator(genre);
         for(UserShow userShow : userShows) {
@@ -105,8 +105,8 @@ public class UserShowServiceImplementation implements  UserShowService {
     }
 
     @Override
-    public UserShow changeUserShowDetails(Long userId, Long showId, UserShow newUserShow) {
-        UserShow userShow = getUserShowByShowId(userId, showId);
+    public UserShow changeUserShowDetails(Long showId, UserShow newUserShow) {
+        UserShow userShow = getUserShowByShowId(showId);
         if(newUserShow.getUserShowId() == null) {
             newUserShow.setUserShowId(userShow.getUserShowId());
         }
@@ -129,8 +129,8 @@ public class UserShowServiceImplementation implements  UserShowService {
     }
 
     @Override
-    public HashMap<String, Integer> getNumberOfShowsWatchedByGenre(Long userId) {
-        List<UserShow> allShows = getAllShowsFromUserList(userId);
+    public HashMap<String, Integer> getNumberOfShowsWatchedByGenre() {
+        List<UserShow> allShows = getAllShowsFromUserList();
         HashMap<String, Integer> showsByGenre = new HashMap<>();
         for(UserShow userShow : allShows) {
             if(userShow.getStatus().equalsIgnoreCase("Watched")) {
