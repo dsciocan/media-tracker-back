@@ -133,4 +133,11 @@ public class UserController {
         }
         return new ResponseEntity<>(userFilms, HttpStatus.OK);
     }
+
+    @GetMapping("/{userId}/totalWatchedRuntime")
+    public ResponseEntity<Integer> getTotalWatchedRuntime(@PathVariable Long userId) {
+        Integer totalRuntime = userEpisodeService.getAllRuntimeWatched(userId);
+
+        return new ResponseEntity<>(totalRuntime, HttpStatus.OK);
+    }
 }
