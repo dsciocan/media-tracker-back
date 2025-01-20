@@ -4,6 +4,7 @@ import com.duroc.mediatracker.model.user.Status;
 import com.duroc.mediatracker.model.user.UserFilm;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 public interface UserFilmService {
@@ -21,4 +22,6 @@ public interface UserFilmService {
     List<UserFilm> getUserFilmsByStatus(Long userId, Status status);
 
     int getUserFilmRuntime(Long userId);
+
+    HashMap<String, Integer> getStatsForFilmGenres(Long userId);
 }
