@@ -32,6 +32,9 @@ public class UserShowServiceImplementation implements  UserShowService {
     @Autowired
     ShowService showService;
 
+    @Autowired
+    UserEpisodeService userEpisodeService;
+
     @Override
     public List<UserShow> getAllShowsFromUserList(Long userId) {
         AppUser user = userService.getUserById(userId);
@@ -51,6 +54,7 @@ public class UserShowServiceImplementation implements  UserShowService {
             userShow.setDateStarted(LocalDate.now());
             userShow.setDateCompleted(LocalDate.now());
         }
+        userEpisodeService.saveAllShowEpisodesAsUserEpisodes(userId, show.getId());
         return userShowRepository.save(userShow);
     }
 
@@ -66,6 +70,7 @@ public class UserShowServiceImplementation implements  UserShowService {
              throw new ItemNotFoundException("Could not find TV show with requested id in specified user's list");
             }
     }
+
 
     public String genreValidator(String genre) {
         if(genre != null && genre.contains(" ")) {

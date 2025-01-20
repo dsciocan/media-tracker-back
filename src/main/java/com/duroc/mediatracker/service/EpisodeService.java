@@ -14,6 +14,8 @@ public interface EpisodeService {
 
     void saveEpisodes(Long apiShowId, int numOfSeasons, Show show) throws IOException, InterruptedException;
 
+    Episode getSavedEpisodeById(Long episodeId);
+
     List<Episode> getSavedEpisodesByShowId(Long showId);
 
     List<Episode> getSavedEpisodesBySeason(Long showId, int seasonNumber) throws IOException, InterruptedException;
