@@ -5,13 +5,13 @@ import com.duroc.mediatracker.model.user.UserEpisode;
 import java.util.List;
 
 public interface UserEpisodeService {
-    List<UserEpisode> getUserEpisodeListByShowId(Long userId, Long showId);
+    List<UserEpisode> getUserEpisodeListByShowId(Long showId);
 
-    List<UserEpisode> saveAllShowEpisodesAsUserEpisodes(Long userId, Long showId);
+    List<UserEpisode> saveAllShowEpisodesAsUserEpisodes(Long showId);
 
-    UserEpisode getUserEpisodeByEpisodeId(Long userId, Long episodeId);
+    UserEpisode getUserEpisodeByEpisodeId(Long episodeId);
 
-    UserEpisode changeUserEpisodeDetails(Long userId, Long episodeId, UserEpisode newUserEpisode);
+    UserEpisode changeUserEpisodeDetails(Long episodeId, UserEpisode newUserEpisode);
 
-    int getAllRuntimeWatched(Long userId);
+    int getAllRuntimeWatched();
 }
