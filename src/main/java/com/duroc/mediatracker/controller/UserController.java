@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/mediatracker/users")
@@ -136,8 +137,13 @@ public class UserController {
 
     @GetMapping("/{userId}/totalWatchedRuntime")
     public ResponseEntity<Integer> getTotalWatchedRuntime(@PathVariable Long userId) {
-        Integer totalRuntime = userEpisodeService.getAllRuntimeWatched(userId) + userFilmService.getUserFilmRuntime(userId);
+        Integer totalRuntime = userService.totalRuntime(userId);
 
         return new ResponseEntity<>(totalRuntime, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/genreStats")
+    public ResponseEntity<Map<String,Integer>> getGenreStats(@PathVariable Long userId) {
+        return new ResponseEntity<>(userService.getAllByGenre(userId),HttpStatus.OK);
     }
 }
