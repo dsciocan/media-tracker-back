@@ -61,10 +61,10 @@ public class UserController {
     }
 
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<AppUser> getUserById(@PathVariable Long userId) {
-        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
-    }
+//    @GetMapping("/{userId}")
+//    public ResponseEntity<AppUser> getUserById(@PathVariable Long userId) {
+//        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+//    }
 
 //    @PostMapping("/save")
 //    public ResponseEntity<AppUser> saveUser(@RequestBody AppUser appUser) {
@@ -76,54 +76,53 @@ public class UserController {
 //        return new ResponseEntity<>(userService.changeUsername(userId, newUsername), HttpStatus.OK);
 //    }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
-        return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser() {
+        return new ResponseEntity<>(userService.deleteUser(), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/shows/")
-    public ResponseEntity<List<UserShow>> getShowsFromUserList(@PathVariable Long userId) throws IOException, InterruptedException {
-        return new ResponseEntity<>(userShowService.getAllShowsFromUserList(userId), HttpStatus.OK);
+    @GetMapping("/shows/")
+    public ResponseEntity<List<UserShow>> getShowsFromUserList() throws IOException, InterruptedException {
+        return new ResponseEntity<>(userShowService.getAllShowsFromUserList(), HttpStatus.OK);
     }
 
-    @PostMapping("/{userId}/shows/save/{apiShowId}")
+    @PostMapping("/shows/save/{apiShowId}")
     public ResponseEntity<UserShow> saveShowToUserList(@RequestBody UserShow userShow,
-                                                       @PathVariable Long userId, @PathVariable Long apiShowId) throws IOException, InterruptedException {
-        return new ResponseEntity<>(userShowService.saveShowToUserList(userShow, userId, apiShowId), HttpStatus.CREATED);
+                                                       @PathVariable Long apiShowId) throws IOException, InterruptedException {
+        return new ResponseEntity<>(userShowService.saveShowToUserList(userShow, apiShowId), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}/shows/{showId}")
-    public ResponseEntity<UserShow> getUserShowByShowId(@PathVariable Long userId, @PathVariable Long showId) {
-        return new ResponseEntity<>(userShowService.getUserShowByShowId(userId, showId), HttpStatus.OK);
+    @GetMapping("/shows/{showId}")
+    public ResponseEntity<UserShow> getUserShowByShowId(@PathVariable Long showId) {
+        return new ResponseEntity<>(userShowService.getUserShowByShowId(showId), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/shows")
-    public ResponseEntity<List<UserShow>> getUserShowsByWatchStatusAndOptionalGenre(@PathVariable Long userId,
-                                                                                    @RequestParam String status, @RequestParam(required = false) String genre) {
-        return new ResponseEntity<>(userShowService.getUserShowsByWatchStatusAndOptionalGenre(userId, status, genre), HttpStatus.OK);
+    @GetMapping("/shows")
+    public ResponseEntity<List<UserShow>> getUserShowsByWatchStatusAndOptionalGenre(@RequestParam String status, @RequestParam(required = false) String genre) {
+        return new ResponseEntity<>(userShowService.getUserShowsByWatchStatusAndOptionalGenre(status, genre), HttpStatus.OK);
     }
 
-    @PutMapping("/{userId}/shows/{showId}")
-    public ResponseEntity<UserShow> changeUserShowDetails(@PathVariable Long userId, @PathVariable Long showId,
+    @PutMapping("/shows/{showId}")
+    public ResponseEntity<UserShow> changeUserShowDetails(@PathVariable Long showId,
                                                           @RequestBody UserShow newUserShow) {
-        return new ResponseEntity<>(userShowService.changeUserShowDetails(userId, showId, newUserShow), HttpStatus.OK);
+        return new ResponseEntity<>(userShowService.changeUserShowDetails(showId, newUserShow), HttpStatus.OK);
     }
 
 
-    @GetMapping("/{userId}/shows/{showId}/episodes")
-    public ResponseEntity<List<UserEpisode>> getUserEpisodeListByShowId(@PathVariable Long userId, @PathVariable Long showId) {
-        return new ResponseEntity<>(userEpisodeService.getUserEpisodeListByShowId(userId, showId), HttpStatus.OK);
+    @GetMapping("/shows/{showId}/episodes")
+    public ResponseEntity<List<UserEpisode>> getUserEpisodeListByShowId(@PathVariable Long showId) {
+        return new ResponseEntity<>(userEpisodeService.getUserEpisodeListByShowId(showId), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/episode/{episodeId}")
-    public ResponseEntity<UserEpisode> getUserEpisodeByEpisodeId(@PathVariable Long userId, @PathVariable Long episodeId) {
-        return new ResponseEntity<>(userEpisodeService.getUserEpisodeByEpisodeId(userId, episodeId), HttpStatus.OK);
+    @GetMapping("/episode/{episodeId}")
+    public ResponseEntity<UserEpisode> getUserEpisodeByEpisodeId(@PathVariable Long episodeId) {
+        return new ResponseEntity<>(userEpisodeService.getUserEpisodeByEpisodeId(episodeId), HttpStatus.OK);
     }
 
-    @PutMapping("/{userId}/episode/{episodeId}")
-    public ResponseEntity<UserEpisode> changeUserEpisodeDetails(@PathVariable Long userId, @PathVariable Long episodeId,
+    @PutMapping("/episode/{episodeId}")
+    public ResponseEntity<UserEpisode> changeUserEpisodeDetails(@PathVariable Long episodeId,
                                                                 @RequestBody UserEpisode newUserEpisode) {
-        return new ResponseEntity<>(userEpisodeService.changeUserEpisodeDetails(userId, episodeId, newUserEpisode), HttpStatus.OK);
+        return new ResponseEntity<>(userEpisodeService.changeUserEpisodeDetails(episodeId, newUserEpisode), HttpStatus.OK);
     }
 
     // UserFilm methods
@@ -166,15 +165,15 @@ public class UserController {
         return new ResponseEntity<>(userFilms, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/totalWatchedRuntime")
-    public ResponseEntity<Integer> getTotalWatchedRuntime(@PathVariable Long userId) {
-        Integer totalRuntime = userService.totalRuntime(userId);
+    @GetMapping("/totalWatchedRuntime")
+    public ResponseEntity<Integer> getTotalWatchedRuntime() {
+        Integer totalRuntime = userService.totalRuntime();
 
         return new ResponseEntity<>(totalRuntime, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/genreStats")
-    public ResponseEntity<Map<String,Integer>> getGenreStats(@PathVariable Long userId) {
-        return new ResponseEntity<>(userService.getAllByGenre(userId),HttpStatus.OK);
+    @GetMapping("/genreStats")
+    public ResponseEntity<Map<String,Integer>> getGenreStats() {
+        return new ResponseEntity<>(userService.getAllByGenre(),HttpStatus.OK);
     }
 }
