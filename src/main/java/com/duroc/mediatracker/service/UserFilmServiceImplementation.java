@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -107,5 +108,22 @@ public class UserFilmServiceImplementation implements UserFilmService{
     public int getUserFilmRuntime(Long userId) {
         List<UserFilm> watchedUserFilms = getUserFilmsByStatus(userId, Status.WATCHED);
         return watchedUserFilms.stream().mapToInt(userFilm->userFilm.getUserFilmId().getFilm().getDuration()).sum();
+    }
+
+    @Override
+    public HashMap<String, Integer> getStatsForFilmGenres(Long userId) {
+        List<UserFilm> watchedUserFilms = getUserFilmsByStatus(userId, Status.WATCHED);
+        HashMap<String,Integer> map = new HashMap<>();
+        for(UserFilm userFilm : watchedUserFilms) {
+            for(String genre:userFilm.getUserFilmId().getFilm().getGenres()){
+                if(!map.containsKey(genre)){
+                    map.put(genre,1);
+                }
+                else{
+                    map.put(genre,map.get(genre)+1);
+                }
+            }
+        }
+        return map;
     }
 }
