@@ -5,6 +5,7 @@ import com.duroc.mediatracker.service.ShowService;
 import com.duroc.mediatracker.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.auth.FirebaseToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -49,63 +51,69 @@ class UserControllerTest {
 
     @Test
     void getUserById() throws Exception {
-        AppUser user = new AppUser(1L, 34459880L, "someone");
+        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String uid = token.getUid();
+        AppUser user = new AppUser(1L, uid);
 
         Mockito.when(userService.getUserById(1L)).thenReturn(user);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/v1/mediatracker/users/1"))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.oAuthId").value(34459880L))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("someone"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(status().isOk()
                 );
     }
 
     @Test
     void saveUser() throws Exception {
-        AppUser user = new AppUser(1L, 34459880L, "someone");
+
+        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String uid = token.getUid();
+        AppUser user = new AppUser(1L, uid);
+
         String json = mapper.writeValueAsString(user);
-        Mockito.when(userService.saveUser(user)).thenReturn(user);
+        Mockito.when(userService.saveUser(uid)).thenReturn(user);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/v1/mediatracker/users/save").contentType(MediaType.APPLICATION_JSON).content(json))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.oAuthId").value(34459880L))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("someone"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(status().isOk()
         );
     }
 
-    @Test
-    void changeUsername() throws Exception {
-        Long userId = 1L;
-        String username = "username";
-        Long oAuthId = 1L;
-        AppUser user = AppUser.builder().id(userId).username(username).oAuthId(oAuthId).build();
-
-        when(userService.changeUsername(userId, username)).thenReturn(user);
-
-        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/mediatracker/users/{userId}", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(username))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(userId))
-                .andExpect(jsonPath("$.username").value(username));
-
-        verify(userService).changeUsername(userId, username);
-    }
+//    @Test
+//    void changeUsername() throws Exception {
+//        Long userId = 1L;
+//        String username = "username";
+//        Long oAuthId = 1L;
+//        AppUser user = AppUser.builder().id(userId).username(username).oAuthId(oAuthId).build();
+//
+//        when(userService.changeUsername(userId, username)).thenReturn(user);
+//
+//        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/mediatracker/users/{userId}", userId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(username))
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.id").value(userId))
+//                .andExpect(jsonPath("$.username").value(username));
+//
+//        verify(userService).changeUsername(userId, username);
+//    }
 
     @Test
     void deleteUser() throws Exception {
         Long userId = 1L;
         String message = "User deleted successfully";
 
-        when(userService.deleteUser(userId)).thenReturn(message);
+        when(userService.deleteUser()).thenReturn(message);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/mediatracker/users/{userId}", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().string(message));
 
-        verify(userService).deleteUser(userId);
+        verify(userService).deleteUser();
     }
 }

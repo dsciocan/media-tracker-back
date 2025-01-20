@@ -47,7 +47,7 @@ class UserFilmServiceTest {
 
         mockUser = new AppUser();
         mockUser.setId(1L);
-        mockUser.setUsername("testUser");
+//        mockUser.setUsername("testUser");
 
         mockFilm = new Film();
         mockFilm.setId(1L);
