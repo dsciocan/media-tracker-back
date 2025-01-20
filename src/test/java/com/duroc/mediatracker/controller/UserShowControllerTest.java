@@ -36,7 +36,7 @@ class UserShowControllerTest {
     private UserShowService userShowService;
 
     @InjectMocks
-    private UserShowController userShowController;
+    private UserController userShowController;
 
     @Autowired
     private MockMvc mockMvc;
