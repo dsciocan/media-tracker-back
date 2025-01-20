@@ -24,8 +24,7 @@ public class UserShow {
 
     private String notes;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    private String status;
 
     private LocalDate dateStarted;
 
