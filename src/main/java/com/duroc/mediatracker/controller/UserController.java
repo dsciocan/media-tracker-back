@@ -95,37 +95,37 @@ public class UserController {
     }
 
     // UserFilm methods
-    @PostMapping("/{userId}/{movieId}")
+    @PostMapping("/{userId}/films/{movieId}")
     public ResponseEntity<UserFilm> saveUserFilm(@PathVariable Long userId, @PathVariable Long movieId, @RequestBody UserFilm userFilm) throws IOException, InterruptedException {
         UserFilm savedUserFilm = userFilmService.saveUserFilm(userFilm, userId, movieId);
         return new ResponseEntity<>(savedUserFilm, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{userId}/films")
     public ResponseEntity<List<UserFilm>> getUserFilms(@PathVariable Long userId) {
         List<UserFilm> userFilms = userFilmService.getAllUserFilms(userId);
         return new ResponseEntity<>(userFilms,HttpStatus.OK);
     }
 
-    @PatchMapping("/{userId}/{filmDbId}")
+    @PatchMapping("/{userId}/films/{filmDbId}")
     public ResponseEntity<UserFilm> updateUserFilm(@PathVariable Long userId, @PathVariable Long filmDbId, @RequestBody UserFilm updatedUserFilm) {
         UserFilm userFilm = userFilmService.updateUserFilm(updatedUserFilm, userId, filmDbId);
         return new ResponseEntity<>(userFilm, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/{filmDbId}")
+    @GetMapping("/{userId}/films/{filmDbId}")
     public ResponseEntity<UserFilm> getUserFilmById(@PathVariable Long userId, @PathVariable Long filmDbId) {
         UserFilm userFilm = userFilmService.getUserFilmById(userId, filmDbId);
         return new ResponseEntity<>(userFilm, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{userId}/{filmDbId}")
+    @DeleteMapping("/{userId}/films/{filmDbId}")
     public ResponseEntity<String> deleteUserFilmById(@PathVariable Long userId, @PathVariable Long filmDbId) {
         userFilmService.deleteUserFilmById(userId, filmDbId);
         return new ResponseEntity<>("UserFilm successfully deleted", HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/search")
+    @GetMapping("/{userId}/films/search")
     public ResponseEntity<?> getUserFilmsByStatus(@PathVariable Long userId, @RequestParam Status status) {
         List<UserFilm> userFilms = userFilmService.getUserFilmsByStatus(userId, status);
         if(userFilms.isEmpty()) {
