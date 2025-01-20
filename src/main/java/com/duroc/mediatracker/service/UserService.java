@@ -6,9 +6,9 @@ import java.util.Map;
 
 public interface UserService {
     AppUser getUserById(Long id);
-    void getUser();
-    AppUser saveUser(AppUser appUser);
-    AppUser changeUsername(Long userId, String newUsername);
+    AppUser getUser();
+    AppUser saveUser(String token);
+//    AppUser changeUsername(Long userId, String newUsername);
     String deleteUser(Long userId);
 
     Map<String,Integer> getAllByGenre (Long userId);

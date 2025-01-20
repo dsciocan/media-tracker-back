@@ -54,10 +54,10 @@ public class UserController {
     @GetMapping("/auth")
     public ResponseEntity<AppUser> authenticateUserIsInDatabase() {
         // ... call whatever userService method needed
-        userService.getUser();
+        AppUser appUser = userService.getUser();
         // HttpStatus.OK only needs to be sent in this case because if anything goes wrong then an Exception should be thrown and
         // the Global exception handler should deal with it
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(appUser, HttpStatus.OK);
     }
 
 
@@ -66,15 +66,15 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<AppUser> saveUser(@RequestBody AppUser appUser) {
-        return new ResponseEntity<>(userService.saveUser(appUser), HttpStatus.OK);
-    }
+//    @PostMapping("/save")
+//    public ResponseEntity<AppUser> saveUser(@RequestBody AppUser appUser) {
+//        return new ResponseEntity<>(userService.saveUser(appUser), HttpStatus.OK);
+//    }
 
-    @PatchMapping("/{userId}")
-    public ResponseEntity<AppUser> changeUsername(@PathVariable Long userId, @RequestBody String newUsername) {
-        return new ResponseEntity<>(userService.changeUsername(userId, newUsername), HttpStatus.OK);
-    }
+//    @PatchMapping("/{userId}")
+//    public ResponseEntity<AppUser> changeUsername(@PathVariable Long userId, @RequestBody String newUsername) {
+//        return new ResponseEntity<>(userService.changeUsername(userId, newUsername), HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {

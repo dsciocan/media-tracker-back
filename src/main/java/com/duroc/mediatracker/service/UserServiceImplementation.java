@@ -6,10 +6,12 @@ import com.duroc.mediatracker.model.user.AppUser;
 import com.duroc.mediatracker.repository.UserRepository;
 import com.google.firebase.auth.FirebaseToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,24 +21,33 @@ public class UserServiceImplementation implements UserService{
     UserRepository userRepository;
 
     @Autowired
+    @Lazy
     UserFilmService userFilmService;
 
     @Autowired
+    @Lazy
     UserShowService userShowService;
 
     @Autowired
+    @Lazy
     UserEpisodeService userEpisodeService;
 
     @Override
-    public void getUser(){
+    public AppUser getUser(){
 //         How to get the details of the user
 //         We use SecurityContextHolder.getContext() to get the specific token for the current request being handled,
 //         .getAuthentication() gets the FirebaseAuthenticationToken
 //         We can now call the .getPrinciple() method and cast it to a FirebaseToken
 //         We can cast it without worry because we know what the Principle Object is (see getPrinciple() in the FirebaseAuthenticationToken.class)
 
-//        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<AppUser> appUsers = userRepository.findByUserToken(token.getUid());
+        if(appUsers.isEmpty()){
+            return saveUser(token.getUid());
+        }
+        else{
+            return  appUsers.getFirst();
+        }
 //        // From that token we can get some details about the user
 //        // Their name
 //        System.out.println(token.getName());
@@ -64,24 +75,21 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public AppUser saveUser(AppUser appUser) {
-        if(appUser.getUsername().isEmpty()) {
-            throw new InvalidItemException("Username cannot be empty");
-        } else {
-            return userRepository.save(appUser);
-        }
+    public AppUser saveUser(String token) {
+        AppUser appUser = AppUser.builder().userToken(token).build();
+        return userRepository.save(appUser);
     }
 
-    @Override
-    public AppUser changeUsername(Long userId, String newUsername) {
-        AppUser user = getUserById(userId);
-        if(newUsername.isEmpty()) {
-            throw new InvalidItemException("Username cannot be empty");
-        } else {
-            user.setUsername(newUsername);
-            return userRepository.save(user);
-        }
-    }
+//    @Override
+//    public AppUser changeUsername(Long userId, String newUsername) {
+//        AppUser user = getUserById(userId);
+//        if(newUsername.isEmpty()) {
+//            throw new InvalidItemException("Username cannot be empty");
+//        } else {
+//            user.setUsername(newUsername);
+//            return userRepository.save(user);
+//        }
+//    }
 
     @Override
     public String deleteUser(Long userId) {
