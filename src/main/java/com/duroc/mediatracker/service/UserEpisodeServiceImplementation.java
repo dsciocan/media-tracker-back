@@ -77,5 +77,19 @@ public class UserEpisodeServiceImplementation implements UserEpisodeService {
             return userEpisodeRepository.save(userEpisode);
         }
     }
+
+
+    @Override
+    public int getAllRuntimeWatched(Long userId) {
+        AppUser user = userService.getUserById(userId);
+        List<UserEpisode> allUserEpisodes = userEpisodeRepository.findByUserEpisodeIdAppUser(user);
+        int totalWatchedRuntime = 0;
+        for(UserEpisode userEpisode : allUserEpisodes) {
+            if(userEpisode.isWatched()) {
+                totalWatchedRuntime += userEpisode.getUserEpisodeId().getEpisode().getRuntime();
+            }
+        }
+        return totalWatchedRuntime;
+    }
 }
 
