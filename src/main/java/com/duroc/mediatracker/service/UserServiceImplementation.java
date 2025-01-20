@@ -7,11 +7,23 @@ import com.duroc.mediatracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class UserServiceImplementation implements UserService{
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserFilmService userFilmService;
+
+    @Autowired
+    UserShowService userShowService;
+
+    @Autowired
+    UserEpisodeService userEpisodeService;
 
     @Override
     public AppUser getUserById(Long id) {
@@ -50,4 +62,20 @@ public class UserServiceImplementation implements UserService{
 
     }
 
+    @Override
+    public Map<String, Integer> getAllByGenre(Long userId) {
+        Map<String, Integer> filmGenreMap = userFilmService.getStatsForFilmGenres(userId);
+        Map<String, Integer> showGenreMap = userShowService.getNumberOfShowsWatchedByGenre(userId);
+
+        Map<String, Integer> resultMap = new HashMap<>(filmGenreMap);
+        for(String genre : showGenreMap.keySet()) {
+            if(!resultMap.containsKey(genre)){
+                resultMap.put(genre,showGenreMap.get(genre));
+            }
+            else{
+                resultMap.put(genre, resultMap.get(genre)+showGenreMap.get(genre));
+            }
+        }
+        return resultMap;
+    }
 }
