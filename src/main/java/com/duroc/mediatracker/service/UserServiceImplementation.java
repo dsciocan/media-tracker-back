@@ -97,7 +97,7 @@ public class UserServiceImplementation implements UserService{
 
     @Override
     public Map<String, Integer> getAllByGenre() {
-        Map<String, Integer> filmGenreMap = userFilmService.getStatsForFilmGenres(userId);
+        Map<String, Integer> filmGenreMap = userFilmService.getStatsForFilmGenres();
         Map<String, Integer> showGenreMap = userShowService.getNumberOfShowsWatchedByGenre();
 
         Map<String, Integer> resultMap = new HashMap<>(filmGenreMap);
@@ -114,7 +114,7 @@ public class UserServiceImplementation implements UserService{
 
     @Override
     public int totalRuntime() {
-        int filmRuntime = userFilmService.getUserFilmRuntime(userId);
+        int filmRuntime = userFilmService.getUserFilmRuntime();
         int showRuntime = userEpisodeService.getAllRuntimeWatched();
         return filmRuntime+showRuntime;
     }

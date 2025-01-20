@@ -11,7 +11,7 @@ public interface UserService {
 //    AppUser changeUsername(Long userId, String newUsername);
     String deleteUser();
 
-    Map<String,Integer> getAllByGenre (Long userId);
+    Map<String,Integer> getAllByGenre ();
 
-    int totalRuntime(Long userId);
+    int totalRuntime();
 }

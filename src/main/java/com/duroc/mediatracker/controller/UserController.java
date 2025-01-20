@@ -126,39 +126,39 @@ public class UserController {
     }
 
     // UserFilm methods
-    @PostMapping("/{userId}/films/{movieId}")
-    public ResponseEntity<UserFilm> saveUserFilm(@PathVariable Long userId, @PathVariable Long movieId, @RequestBody UserFilm userFilm) throws IOException, InterruptedException {
-        UserFilm savedUserFilm = userFilmService.saveUserFilm(userFilm, userId, movieId);
+    @PostMapping("/films/{movieId}")
+    public ResponseEntity<UserFilm> saveUserFilm(@PathVariable Long movieId, @RequestBody UserFilm userFilm) throws IOException, InterruptedException {
+        UserFilm savedUserFilm = userFilmService.saveUserFilm(userFilm, movieId);
         return new ResponseEntity<>(savedUserFilm, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}/films")
-    public ResponseEntity<List<UserFilm>> getUserFilms(@PathVariable Long userId) {
-        List<UserFilm> userFilms = userFilmService.getAllUserFilms(userId);
+    @GetMapping("/films")
+    public ResponseEntity<List<UserFilm>> getUserFilms() {
+        List<UserFilm> userFilms = userFilmService.getAllUserFilms();
         return new ResponseEntity<>(userFilms,HttpStatus.OK);
     }
 
-    @PatchMapping("/{userId}/films/{filmDbId}")
-    public ResponseEntity<UserFilm> updateUserFilm(@PathVariable Long userId, @PathVariable Long filmDbId, @RequestBody UserFilm updatedUserFilm) {
-        UserFilm userFilm = userFilmService.updateUserFilm(updatedUserFilm, userId, filmDbId);
+    @PatchMapping("/films/{filmDbId}")
+    public ResponseEntity<UserFilm> updateUserFilm(@PathVariable Long filmDbId, @RequestBody UserFilm updatedUserFilm) {
+        UserFilm userFilm = userFilmService.updateUserFilm(updatedUserFilm, filmDbId);
         return new ResponseEntity<>(userFilm, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/films/{filmDbId}")
-    public ResponseEntity<UserFilm> getUserFilmById(@PathVariable Long userId, @PathVariable Long filmDbId) {
-        UserFilm userFilm = userFilmService.getUserFilmById(userId, filmDbId);
+    @GetMapping("/films/{filmDbId}")
+    public ResponseEntity<UserFilm> getUserFilmById(@PathVariable Long filmDbId) {
+        UserFilm userFilm = userFilmService.getUserFilmById(filmDbId);
         return new ResponseEntity<>(userFilm, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{userId}/films/{filmDbId}")
-    public ResponseEntity<String> deleteUserFilmById(@PathVariable Long userId, @PathVariable Long filmDbId) {
-        userFilmService.deleteUserFilmById(userId, filmDbId);
+    @DeleteMapping("/films/{filmDbId}")
+    public ResponseEntity<String> deleteUserFilmById(@PathVariable Long filmDbId) {
+        userFilmService.deleteUserFilmById(filmDbId);
         return new ResponseEntity<>("UserFilm successfully deleted", HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/films/search")
-    public ResponseEntity<?> getUserFilmsByStatus(@PathVariable Long userId, @RequestParam Status status) {
-        List<UserFilm> userFilms = userFilmService.getUserFilmsByStatus(userId, status);
+    @GetMapping("/films/search")
+    public ResponseEntity<?> getUserFilmsByStatus(@RequestParam Status status) {
+        List<UserFilm> userFilms = userFilmService.getUserFilmsByStatus(status);
         if(userFilms.isEmpty()) {
             return new ResponseEntity<>("No films found", HttpStatus.NOT_FOUND);
         }
