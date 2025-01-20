@@ -19,6 +19,4 @@ public class AppUser {
 
     private Long oAuthId;
 
-    private String username;
-
 }
