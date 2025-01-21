@@ -42,7 +42,9 @@ public class UserEpisodeServiceImplementation implements UserEpisodeService {
         showEpisodes.forEach((ep) ->
         {
             UserEpisodeId userEpisodeId = new UserEpisodeId(user, ep);
-            userEpisodeList.add(new UserEpisode(userEpisodeId, 0, "", false, null));
+            UserEpisode userEpisode = new UserEpisode(userEpisodeId, 0, "", false, null);
+            userEpisodeList.add(userEpisode);
+            userEpisodeRepository.save(userEpisode);
         });
         return userEpisodeList;
     }

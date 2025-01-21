@@ -117,7 +117,7 @@ public class UserShowServiceImplementation implements  UserShowService {
         } else {
             userShow.setNotes(newUserShow.getNotes());
             if(newUserShow.getStatus().equalsIgnoreCase("Watching") && !userShow.getStatus().equalsIgnoreCase("Watching")) {
-                userShow.setDateCompleted(LocalDate.now());
+                userShow.setDateStarted(LocalDate.now());
             }
             if(newUserShow.getStatus().equalsIgnoreCase("Watched") && !userShow.getStatus().equalsIgnoreCase("Watched")) {
                 userShow.setDateCompleted(LocalDate.now());
