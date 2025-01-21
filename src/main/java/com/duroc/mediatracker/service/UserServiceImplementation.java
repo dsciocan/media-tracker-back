@@ -63,10 +63,6 @@ public class UserServiceImplementation implements UserService{
     };
     @Override
     public AppUser getUserById(Long id) {
-
-
-
-
         if(userRepository.findById(id).isPresent()) {
             return userRepository.findById(id).get();
         } else {
@@ -92,17 +88,17 @@ public class UserServiceImplementation implements UserService{
 //    }
 
     @Override
-    public String deleteUser(Long userId) {
-        AppUser user = getUserById(userId);
+    public String deleteUser() {
+        AppUser user = getUser();
         userRepository.delete(user);
         return "User deleted successfully";
 
     }
 
     @Override
-    public Map<String, Integer> getAllByGenre(Long userId) {
-        Map<String, Integer> filmGenreMap = userFilmService.getStatsForFilmGenres(userId);
-        Map<String, Integer> showGenreMap = userShowService.getNumberOfShowsWatchedByGenre(userId);
+    public Map<String, Integer> getAllByGenre() {
+        Map<String, Integer> filmGenreMap = userFilmService.getStatsForFilmGenres();
+        Map<String, Integer> showGenreMap = userShowService.getNumberOfShowsWatchedByGenre();
 
         Map<String, Integer> resultMap = new HashMap<>(filmGenreMap);
         for(String genre : showGenreMap.keySet()) {
@@ -117,9 +113,9 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public int totalRuntime(Long userId) {
-        int filmRuntime = userFilmService.getUserFilmRuntime(userId);
-        int showRuntime = userEpisodeService.getAllRuntimeWatched(userId);
+    public int totalRuntime() {
+        int filmRuntime = userFilmService.getUserFilmRuntime();
+        int showRuntime = userEpisodeService.getAllRuntimeWatched();
         return filmRuntime+showRuntime;
     }
 }

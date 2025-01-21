@@ -27,8 +27,8 @@ public class UserFilmServiceImplementation implements UserFilmService{
     UserService userService;
 
     @Override
-    public UserFilm saveUserFilm(UserFilm userFilm, Long userId, Long movieId) throws IOException, InterruptedException {
-        AppUser appUser = userService.getUserById(userId);
+    public UserFilm saveUserFilm(UserFilm userFilm,Long movieId) throws IOException, InterruptedException {
+        AppUser appUser = userService.getUser();
         Film film = filmService.addFilmToList(movieId);
 
         //set the composite key
@@ -41,14 +41,14 @@ public class UserFilmServiceImplementation implements UserFilmService{
     }
 
     @Override
-    public List<UserFilm> getAllUserFilms(Long userId) {
-        AppUser user = userService.getUserById(userId);
-        return userFilmRepository.findByUserFilmIdAppUser(user);
+    public List<UserFilm> getAllUserFilms() {
+        AppUser appUser = userService.getUser();
+        return userFilmRepository.findByUserFilmIdAppUser(appUser);
     }
 
     @Override
-    public UserFilm updateUserFilm(UserFilm userFilm, Long userId, Long filmDbId) {
-        AppUser appUser = userService.getUserById(userId);
+    public UserFilm updateUserFilm(UserFilm userFilm, Long filmDbId) {
+        AppUser appUser = userService.getUser();
 
         Film film = filmService.getFilmById(filmDbId).orElseThrow(() ->
                 new ItemNotFoundException("Film not found"));
@@ -70,8 +70,8 @@ public class UserFilmServiceImplementation implements UserFilmService{
     }
 
     @Override
-    public UserFilm getUserFilmById(Long userId, Long filmDbId) {
-        AppUser appUser = userService.getUserById(userId);
+    public UserFilm getUserFilmById(Long filmDbId) {
+        AppUser appUser = userService.getUser();
 
         Film film = filmService.getFilmById(filmDbId).orElseThrow(() ->
                 new ItemNotFoundException("Film not found"));
@@ -85,8 +85,8 @@ public class UserFilmServiceImplementation implements UserFilmService{
     }
 
     @Override
-    public void deleteUserFilmById(Long userId, Long filmDbId) {
-        AppUser appUser = userService.getUserById(userId);
+    public void deleteUserFilmById(Long filmDbId) {
+        AppUser appUser = userService.getUser();
 
         Film film = filmService.getFilmById(filmDbId).orElseThrow(() ->
                 new ItemNotFoundException("Film not found"));
@@ -99,20 +99,20 @@ public class UserFilmServiceImplementation implements UserFilmService{
     }
 
     @Override
-    public List<UserFilm> getUserFilmsByStatus(Long userId, Status status) {
-        List<UserFilm> allUserFilms = getAllUserFilms(userId);
+    public List<UserFilm> getUserFilmsByStatus(Status status) {
+        List<UserFilm> allUserFilms = getAllUserFilms();
         return allUserFilms.stream().filter(userFilm -> userFilm.getStatus().equals(status)).toList();
     }
 
     @Override
-    public int getUserFilmRuntime(Long userId) {
-        List<UserFilm> watchedUserFilms = getUserFilmsByStatus(userId, Status.WATCHED);
+    public int getUserFilmRuntime() {
+        List<UserFilm> watchedUserFilms = getUserFilmsByStatus(Status.WATCHED);
         return watchedUserFilms.stream().mapToInt(userFilm->userFilm.getUserFilmId().getFilm().getDuration()).sum();
     }
 
     @Override
-    public HashMap<String, Integer> getStatsForFilmGenres(Long userId) {
-        List<UserFilm> watchedUserFilms = getUserFilmsByStatus(userId, Status.WATCHED);
+    public HashMap<String, Integer> getStatsForFilmGenres() {
+        List<UserFilm> watchedUserFilms = getUserFilmsByStatus(Status.WATCHED);
         HashMap<String,Integer> map = new HashMap<>();
         for(UserFilm userFilm : watchedUserFilms) {
             for(String genre:userFilm.getUserFilmId().getFilm().getGenres()){

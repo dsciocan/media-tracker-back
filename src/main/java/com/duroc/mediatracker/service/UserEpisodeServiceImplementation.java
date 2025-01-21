@@ -28,28 +28,30 @@ public class UserEpisodeServiceImplementation implements UserEpisodeService {
     UserService userService;
 
     @Override
-    public List<UserEpisode> getUserEpisodeListByShowId(Long userId, Long showId) {
-        AppUser user = userService.getUserById(userId);
+    public List<UserEpisode> getUserEpisodeListByShowId(Long showId) {
+        AppUser user = userService.getUser();
         List<UserEpisode> allUserEpisodes = userEpisodeRepository.findByUserEpisodeIdAppUser(user);
         return allUserEpisodes.stream().filter(ep -> Objects.equals(ep.getUserEpisodeId().getEpisode().getShow().getId(), showId)).toList();
     }
 
     @Override
-    public List<UserEpisode> saveAllShowEpisodesAsUserEpisodes(Long userId, Long showId) {
-        AppUser user = userService.getUserById(userId);
+    public List<UserEpisode> saveAllShowEpisodesAsUserEpisodes(Long showId) {
+        AppUser user = userService.getUser();
         List<Episode> showEpisodes = episodeService.getSavedEpisodesByShowId(showId);
         List<UserEpisode> userEpisodeList = new ArrayList<>();
         showEpisodes.forEach((ep) ->
         {
             UserEpisodeId userEpisodeId = new UserEpisodeId(user, ep);
-            userEpisodeList.add(new UserEpisode(userEpisodeId, 0, "", false, null));
+            UserEpisode userEpisode = new UserEpisode(userEpisodeId, 0, "", false, null);
+            userEpisodeList.add(userEpisode);
+            userEpisodeRepository.save(userEpisode);
         });
         return userEpisodeList;
     }
 
     @Override
-    public UserEpisode getUserEpisodeByEpisodeId(Long userId, Long episodeId) {
-        AppUser user = userService.getUserById(userId);
+    public UserEpisode getUserEpisodeByEpisodeId(Long episodeId) {
+        AppUser user = userService.getUser();
         Episode episode = episodeService.getSavedEpisodeById(episodeId);
         UserEpisodeId userEpisodeId = new UserEpisodeId(user, episode);
         if(userEpisodeRepository.findById(userEpisodeId).isPresent()) {
@@ -60,8 +62,8 @@ public class UserEpisodeServiceImplementation implements UserEpisodeService {
 
 
     @Override
-    public UserEpisode changeUserEpisodeDetails(Long userId, Long episodeId, UserEpisode newUserEpisode) {
-        UserEpisode userEpisode = getUserEpisodeByEpisodeId(userId, episodeId);
+    public UserEpisode changeUserEpisodeDetails(Long episodeId, UserEpisode newUserEpisode) {
+        UserEpisode userEpisode = getUserEpisodeByEpisodeId(episodeId);
         if(newUserEpisode.getUserEpisodeId() == null) {
             newUserEpisode.setUserEpisodeId(userEpisode.getUserEpisodeId());
         }
@@ -80,8 +82,8 @@ public class UserEpisodeServiceImplementation implements UserEpisodeService {
 
 
     @Override
-    public int getAllRuntimeWatched(Long userId) {
-        AppUser user = userService.getUserById(userId);
+    public int getAllRuntimeWatched() {
+        AppUser user = userService.getUser();
         List<UserEpisode> allUserEpisodes = userEpisodeRepository.findByUserEpisodeIdAppUser(user);
         int totalWatchedRuntime = 0;
         for(UserEpisode userEpisode : allUserEpisodes) {

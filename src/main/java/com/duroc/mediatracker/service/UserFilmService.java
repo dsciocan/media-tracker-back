@@ -9,19 +9,19 @@ import java.util.List;
 
 public interface UserFilmService {
 
-    UserFilm saveUserFilm(UserFilm userFilm, Long userId, Long movieId) throws IOException, InterruptedException;
+    UserFilm saveUserFilm(UserFilm userFilm, Long movieId) throws IOException, InterruptedException;
 
-    List<UserFilm> getAllUserFilms(Long userId);
+    List<UserFilm> getAllUserFilms();
 
-    UserFilm updateUserFilm(UserFilm userFilm, Long userId, Long movieDbId);
+    UserFilm updateUserFilm(UserFilm userFilm, Long movieDbId);
 
-    UserFilm getUserFilmById(Long userId, Long filmDbId);
+    UserFilm getUserFilmById(Long filmDbId);
 
-    void deleteUserFilmById(Long userId, Long filmDbId);
+    void deleteUserFilmById(Long filmDbId);
 
-    List<UserFilm> getUserFilmsByStatus(Long userId, Status status);
+    List<UserFilm> getUserFilmsByStatus(Status status);
 
-    int getUserFilmRuntime(Long userId);
+    int getUserFilmRuntime();
 
-    HashMap<String, Integer> getStatsForFilmGenres(Long userId);
+    HashMap<String, Integer> getStatsForFilmGenres();
 }

@@ -9,9 +9,9 @@ public interface UserService {
     AppUser getUser();
     AppUser saveUser(String token);
 //    AppUser changeUsername(Long userId, String newUsername);
-    String deleteUser(Long userId);
+    String deleteUser();
 
-    Map<String,Integer> getAllByGenre (Long userId);
+    Map<String,Integer> getAllByGenre ();
 
-    int totalRuntime(Long userId);
+    int totalRuntime();
 }

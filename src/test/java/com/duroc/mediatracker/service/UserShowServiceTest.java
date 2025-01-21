@@ -7,12 +7,14 @@ import com.duroc.mediatracker.model.user.UserShow;
 import com.duroc.mediatracker.model.user.UserShowId;
 import com.duroc.mediatracker.repository.ShowRepository;
 import com.duroc.mediatracker.repository.UserShowRepository;
+import com.google.firebase.auth.FirebaseToken;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -40,7 +42,9 @@ class UserShowServiceTest {
 
     @Test
     void getAllShowsFromUserList() {
-        AppUser user  = new AppUser(1L, 123535L, "username");
+        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String uid = token.getUid();
+        AppUser user = new AppUser(1L, uid);
         Show sampleShow = new Show(1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
@@ -54,7 +58,9 @@ class UserShowServiceTest {
 
     @Test
     void saveShowToUserList() throws IOException, InterruptedException {
-        AppUser user  = new AppUser(1L, 123535L, "username");
+        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String uid = token.getUid();
+        AppUser user = new AppUser(1L, uid);
         Show sampleShow = new Show(1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
@@ -69,7 +75,9 @@ class UserShowServiceTest {
 
     @Test
     void getUserShowByShowId() {
-        AppUser user  = new AppUser(1L, 123535L, "username");
+        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String uid = token.getUid();
+        AppUser user = new AppUser(1L, uid);
         Show sampleShow = new Show(1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
@@ -96,7 +104,9 @@ class UserShowServiceTest {
 
     @Test
     void getUserShowsByWatchStatusAndOptionalGenre() {
-        AppUser user  = new AppUser(1L, 123535L, "username");
+        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String uid = token.getUid();
+        AppUser user = new AppUser(1L, uid);
         Show sampleShow = new Show(1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
@@ -128,7 +138,9 @@ class UserShowServiceTest {
 
     @Test
     void changeUserShowDetails() {
-        AppUser user  = new AppUser(1L, 123535L, "username");
+        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String uid = token.getUid();
+        AppUser user = new AppUser(1L, uid);
         Show sampleShow = new Show(1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
