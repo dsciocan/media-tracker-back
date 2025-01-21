@@ -21,7 +21,7 @@ public class Film {
 
     private String title;
 
-    @Lob
+    @Column(length = 2000)
     private String synopsis;
 
     private int releaseYear;
