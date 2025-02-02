@@ -17,4 +17,7 @@ public interface FilmService {
     Optional<Film> getFilmById(Long Id);
 
     void deleteFilmById(Long Id);
+
+    Film getFilmByTmdbId(Long tmdbId);
+
 }
