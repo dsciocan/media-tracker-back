@@ -9,6 +9,7 @@ import com.duroc.mediatracker.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -51,4 +52,10 @@ public class FilmController {
         filmService.deleteFilmById(Id);
         return new ResponseEntity<>("Film successfully deleted", HttpStatus.OK);
     }
+
+    @GetMapping("/saved/tmdb={tmdbId}")
+    public ResponseEntity<Film> getFilmByTmdbId(@PathVariable Long tmdbId) {
+        return new ResponseEntity<>(filmService.getFilmByTmdbId(tmdbId), HttpStatus.OK);
+    }
+
 }

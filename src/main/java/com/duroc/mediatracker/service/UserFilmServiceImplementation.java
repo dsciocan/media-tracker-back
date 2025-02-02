@@ -37,6 +37,10 @@ public class UserFilmServiceImplementation implements UserFilmService{
         userFilmId.setFilm(film);
         userFilm.setUserFilmId(userFilmId);
 
+        if(userFilmRepository.findById(userFilmId).isPresent()) {
+            return userFilmRepository.findById(userFilmId).get();
+        }
+
         return userFilmRepository.save(userFilm);
     }
 
@@ -125,5 +129,16 @@ public class UserFilmServiceImplementation implements UserFilmService{
             }
         }
         return map;
+    }
+
+    @Override
+    public boolean isUserFilmAlreadySaved(Long tmdbId) {
+        AppUser user = userService.getUser();
+        Film film = filmService.getFilmByTmdbId(tmdbId);
+        UserFilmId userFilmId = new UserFilmId();
+        userFilmId.setAppUser(user);
+        userFilmId.setFilm(film);
+
+        return userFilmRepository.existsById(userFilmId);
     }
 }

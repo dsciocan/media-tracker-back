@@ -176,4 +176,9 @@ public class UserController {
     public ResponseEntity<Map<String,Integer>> getGenreStats() {
         return new ResponseEntity<>(userService.getAllByGenre(),HttpStatus.OK);
     }
+
+    @GetMapping("/film/{tmdbId}/isSaved")
+    public ResponseEntity<Boolean> getSavedStatus(@PathVariable Long tmdbId) {
+        return new ResponseEntity<>(userFilmService.isUserFilmAlreadySaved(tmdbId), HttpStatus.OK);
+    }
 }

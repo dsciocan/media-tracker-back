@@ -51,8 +51,12 @@ public class FilmServiceImplementation implements FilmService{
 
     @Override
     public Film addFilmToList(Long MovieId) throws IOException, InterruptedException {
+        if(!filmRepository.findFilmByTmdbId(MovieId).isEmpty()) {
+            return filmRepository.findFilmByTmdbId(MovieId).getFirst();
+        }
         FilmDetails filmDetails = getFilmDetails(MovieId);
         Film film = Film.builder()
+                .tmdbId(MovieId)
                 .title(filmDetails.title())
                 .synopsis(filmDetails.overview())
                 .releaseYear(Integer.parseInt(filmDetails.release_date().split("-")[0]))
@@ -81,5 +85,15 @@ public class FilmServiceImplementation implements FilmService{
         }
         filmRepository.deleteById(Id);
     }
+
+    @Override
+    public Film getFilmByTmdbId(Long tmdbId) {
+        if(!filmRepository.findFilmByTmdbId(tmdbId).isEmpty()) {
+            return filmRepository.findFilmByTmdbId(tmdbId).getFirst();
+        } else {
+            return null;
+        }
+    }
+
 
 }
