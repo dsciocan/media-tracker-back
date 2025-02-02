@@ -24,4 +24,6 @@ public interface UserFilmService {
     int getUserFilmRuntime();
 
     HashMap<String, Integer> getStatsForFilmGenres();
+
+    boolean isUserFilmAlreadySaved(Long tmdbId);
 }
