@@ -34,14 +34,6 @@ class UserServiceTest {
 
     }
 
-    @Test
-    void testSaveUser() {
-        AppUser user = new AppUser(1L, "123");
-
-        Mockito.when(userRepository.save(user)).thenReturn(user);
-
-        assertEquals(user, userService.saveUser("123"));
-    }
 
 //    @Test
 //    void testChangeUsername() {

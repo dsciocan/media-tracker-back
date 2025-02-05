@@ -50,37 +50,19 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserById() throws Exception {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
+    void getUser() throws Exception {
+//        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String uid = token.getUid();
+        AppUser user = new AppUser(1L, "1244");
 
-        Mockito.when(userService.getUserById(1L)).thenReturn(user);
+        Mockito.when(userService.getUser()).thenReturn(user);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/v1/mediatracker/users/1"))
+                MockMvcRequestBuilders.get("/api/v1/mediatracker/users/auth"))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.oAuthId").value(34459880L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(status().isOk()
                 );
-    }
-
-    @Test
-    void saveUser() throws Exception {
-
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-
-        String json = mapper.writeValueAsString(user);
-        Mockito.when(userService.saveUser(uid)).thenReturn(user);
-
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/v1/mediatracker/users/save").contentType(MediaType.APPLICATION_JSON).content(json))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.oAuthId").value(34459880L))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
-                .andExpect(status().isOk()
-        );
     }
 
 //    @Test
@@ -110,7 +92,7 @@ class UserControllerTest {
 
         when(userService.deleteUser()).thenReturn(message);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/mediatracker/users/{userId}", userId))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/mediatracker/users/delete", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().string(message));
 

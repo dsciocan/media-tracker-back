@@ -55,19 +55,18 @@ class UserShowControllerTest {
     @Test
     void getShowSearchResults() throws Exception {
 
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
+
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", LocalDate.now(), null);
         List<UserShow> sampleList = List.of(userShow);
 
-        Mockito.when(userShowService.getAllShowsFromUserList(1L)).thenReturn(sampleList);
+        Mockito.when(userShowService.getAllShowsFromUserList()).thenReturn(sampleList);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/v1/mediatracker/users/1/shows/"))
+                        MockMvcRequestBuilders.get("/api/v1/mediatracker/users/shows/"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].userShowId.show.title").value("test"))
                 .andExpect(status().isOk()
                 );
@@ -75,37 +74,33 @@ class UserShowControllerTest {
 
     @Test
     void saveShowToUserList() throws Exception {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", null, null);
         String json = mapper.writeValueAsString(userShow);
 
-        Mockito.when(userShowService.saveShowToUserList(userShow, 1L, 123L)).thenReturn(userShow);
+        Mockito.when(userShowService.saveShowToUserList(userShow,  123L)).thenReturn(userShow);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/v1/mediatracker/users/1/shows/save/123").contentType(MediaType.APPLICATION_JSON).content(json))
+                        MockMvcRequestBuilders.post("/api/v1/mediatracker/users/shows/save/123").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated()
                 );
     }
 
     @Test
     void getUserShowByShowId() throws Exception {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", null, null);
 
-        Mockito.when(userShowService.getUserShowByShowId(1L, 1L)).thenReturn(userShow);
+        Mockito.when(userShowService.getUserShowByShowId(1L)).thenReturn(userShow);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/v1/mediatracker/users/1/shows/1"))
+                        MockMvcRequestBuilders.get("/api/v1/mediatracker/users/shows/1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.userShowId.show.title").value("test"))
                 .andExpect(status().isOk()
                 );
@@ -113,19 +108,17 @@ class UserShowControllerTest {
 
     @Test
     void getUserShowsByWatchStatusAndOptionalGenre() throws Exception {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", null, null);
         List<UserShow> sampleList = List.of(userShow);
 
-        Mockito.when(userShowService.getUserShowsByWatchStatusAndOptionalGenre(1L, "Watching", "genre")).thenReturn(sampleList);
+        Mockito.when(userShowService.getUserShowsByWatchStatusAndOptionalGenre("Watching", "genre")).thenReturn(sampleList);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/v1/mediatracker/users/1/shows?status=Watching&genre=genre"))
+                        MockMvcRequestBuilders.get("/api/v1/mediatracker/users/shows?status=Watching&genre=genre"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].userShowId.show.title").value("test"))
                 .andExpect(status().isOk()
                 );
@@ -133,10 +126,8 @@ class UserShowControllerTest {
 
     @Test
     void changeUserShowDetails() throws Exception {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", null, null);
@@ -146,10 +137,10 @@ class UserShowControllerTest {
 
         String json = mapper.writeValueAsString(newShow);
 
-        Mockito.when(userShowService.changeUserShowDetails(1L, 1L, newShow)).thenReturn(resultShow);
+        Mockito.when(userShowService.changeUserShowDetails(1L, newShow)).thenReturn(resultShow);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.put("/api/v1/mediatracker/users/1/shows/1").contentType(MediaType.APPLICATION_JSON).content(json))
+                        MockMvcRequestBuilders.put("/api/v1/mediatracker/users/shows/1").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.userShowId.show.title").value("test"))
                 .andExpect(status().isOk()
                 );

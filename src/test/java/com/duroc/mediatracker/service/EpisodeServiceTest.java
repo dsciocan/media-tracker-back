@@ -31,7 +31,7 @@ class EpisodeServiceTest {
     void getSavedEpisodesByShowId() {
 
 
-        Show sampleShow = new Show(1L, "test", "test",
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200,
                 "US", "en",
                 List.of());
@@ -58,7 +58,7 @@ class EpisodeServiceTest {
 
     void getSavedEpisodesBySeason() {
 
-        Show sampleShow = new Show(1L, "test", "test",
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200,
                 "US", "en",
                 List.of());

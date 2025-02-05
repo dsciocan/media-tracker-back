@@ -40,6 +40,7 @@ class UserFilmServiceTest {
     private AppUser mockUser;
     private Film mockFilm;
     private UserFilm mockUserFilm;
+    private UserFilmId mockUserFilmId;
 
     @BeforeEach
     void setUp() {
@@ -51,13 +52,14 @@ class UserFilmServiceTest {
 
         mockFilm = new Film();
         mockFilm.setId(1L);
+        mockFilm.setTmdbId(1L);
         mockFilm.setTitle("Test Film");
 
         mockUserFilm = new UserFilm();
-        UserFilmId userFilmId = new UserFilmId();
-        userFilmId.setAppUser(mockUser);
-        userFilmId.setFilm(mockFilm);
-        mockUserFilm.setUserFilmId(userFilmId);
+        mockUserFilmId = new UserFilmId();
+        mockUserFilmId.setAppUser(mockUser);
+        mockUserFilmId.setFilm(mockFilm);
+        mockUserFilm.setUserFilmId(mockUserFilmId);
         mockUserFilm.setRating(5);
         mockUserFilm.setNotes("Great movie!");
         mockUserFilm.setStatus(Status.WATCHED);
@@ -66,28 +68,28 @@ class UserFilmServiceTest {
 
     @Test
     void saveUserFilm() throws IOException, InterruptedException {
-        when(userService.getUserById(1L)).thenReturn(mockUser);
+        when(userService.getUser()).thenReturn(mockUser);
         when(filmService.addFilmToList(1L)).thenReturn(mockFilm);
         when(userFilmRepository.save(mockUserFilm)).thenReturn(mockUserFilm);
 
-        UserFilm result = userFilmService.saveUserFilm(mockUserFilm, 1L, 1L);
+        UserFilm result = userFilmService.saveUserFilm(mockUserFilm, 1L);
 
         assertNotNull(result);
         assertEquals(5, result.getRating());
         assertEquals(mockUser, result.getUserFilmId().getAppUser());
         assertEquals(mockFilm, result.getUserFilmId().getFilm());
 
-        verify(userService, times(1)).getUserById(1L);
+        verify(userService, times(1)).getUser();
         verify(filmService, times(1)).addFilmToList(1L);
         verify(userFilmRepository, times(1)).save(mockUserFilm);
     }
 
     @Test
     void getAllUserFilms() {
-        when(userService.getUserById(1L)).thenReturn(mockUser);
+        when(userService.getUser()).thenReturn(mockUser);
         when(userFilmRepository.findByUserFilmIdAppUser(mockUser)).thenReturn(List.of(mockUserFilm));
 
-        List<UserFilm> result = userFilmService.getAllUserFilms(1L);
+        List<UserFilm> result = userFilmService.getAllUserFilms();
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -98,13 +100,13 @@ class UserFilmServiceTest {
 
     @Test
     void updateUserFilm() {
-        when(userService.getUserById(1L)).thenReturn(mockUser);
+        when(userService.getUser()).thenReturn(mockUser);
         when(filmService.getFilmById(1L)).thenReturn(Optional.of(mockFilm));
         when(userFilmRepository.findById(mockUserFilm.getUserFilmId())).thenReturn(Optional.of(mockUserFilm));
         when(userFilmRepository.save(mockUserFilm)).thenReturn(mockUserFilm);
 
         mockUserFilm.setNotes("Updated notes");
-        UserFilm result = userFilmService.updateUserFilm(mockUserFilm, 1L, 1L);
+        UserFilm result = userFilmService.updateUserFilm(mockUserFilm, 1L);
 
         assertNotNull(result);
         assertEquals("Updated notes", result.getNotes());
@@ -115,11 +117,11 @@ class UserFilmServiceTest {
 
     @Test
     void getUserFilmById() {
-        when(userService.getUserById(1L)).thenReturn(mockUser);
+        when(userService.getUser()).thenReturn(mockUser);
         when(filmService.getFilmById(1L)).thenReturn(Optional.of(mockFilm));
         when(userFilmRepository.findById(mockUserFilm.getUserFilmId())).thenReturn(Optional.of(mockUserFilm));
 
-        UserFilm result = userFilmService.getUserFilmById(1L, 1L);
+        UserFilm result = userFilmService.getUserFilmById(1L);
 
         assertNotNull(result);
         assertEquals("Test Film", result.getUserFilmId().getFilm().getTitle());
@@ -128,20 +130,20 @@ class UserFilmServiceTest {
 
     @Test
     void deleteUserFilmById() {
-        when(userService.getUserById(1L)).thenReturn(mockUser);
+        when(userService.getUser()).thenReturn(mockUser);
         when(filmService.getFilmById(1L)).thenReturn(Optional.of(mockFilm));
 
-        userFilmService.deleteUserFilmById(1L, 1L);
+        userFilmService.deleteUserFilmById(1L);
 
         verify(userFilmRepository, times(1)).deleteById(mockUserFilm.getUserFilmId());
     }
 
     @Test
     void getUserFilmsByStatus() {
-        when(userService.getUserById(1L)).thenReturn(mockUser);
+        when(userService.getUser()).thenReturn(mockUser);
         when(userFilmRepository.findByUserFilmIdAppUser(mockUser)).thenReturn(List.of(mockUserFilm));
 
-        List<UserFilm> result = userFilmService.getUserFilmsByStatus(1L, Status.WATCHED);
+        List<UserFilm> result = userFilmService.getUserFilmsByStatus(Status.WATCHED);
 
         assertNotNull(result);
         assertEquals(1, result.size());

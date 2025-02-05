@@ -69,7 +69,7 @@ class ShowServiceTest {
 
         Show savedShow = showServiceImplementation.saveShowDetails(1399L);
 
-        Show expectedShow = new Show(null, "Game of Thrones",
+        Show expectedShow = new Show(null, 1399L, "Game of Thrones",
                 "Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
                 2011, 2019, true, "https://image.tmdb.org/t/p/original/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", List.of("Sci-Fi & Fantasy", "Drama", "Action & Adventure"), 8, 73, "US", "en", new ArrayList<>());
         assertAll(() -> {
@@ -80,7 +80,7 @@ class ShowServiceTest {
     @Test
     @DisplayName("getSavedShow returns the details of previously saved show")
     void testGetSavedShow() throws IOException, InterruptedException {
-        Show savedShow = new Show(1L, "Game of Thrones",
+        Show savedShow = new Show(1L, 1L, "Game of Thrones",
                 "Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
                 2011, 2019, true, "https://image.tmdb.org/t/p/original/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", List.of("Sci-Fi & Fantasy", "Drama", "Action & Adventure"), 8, 73, "US", "en", List.of(new Episode()));
 

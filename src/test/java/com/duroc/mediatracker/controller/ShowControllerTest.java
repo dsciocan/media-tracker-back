@@ -85,7 +85,7 @@ class ShowControllerTest {
     @DisplayName("POST save show details works as expected when the service returns an appropriate object")
     public void testSaveShowDetails() throws Exception {
 
-        Show sampleShow = new Show(1L, "test", "test",
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         Mockito.when(showService.saveShowDetails(9999999L)).thenReturn(sampleShow);
 
@@ -101,7 +101,7 @@ class ShowControllerTest {
     @DisplayName("GET saved show details works as expected when the service returns an appropriate object")
     public void testGetSavedShowById() throws Exception {
 
-        Show sampleShow = new Show(1L, "test", "test",
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
 
         Mockito.when(showService.getSavedShow(1L)).thenReturn(sampleShow);
@@ -120,7 +120,7 @@ class ShowControllerTest {
     @DisplayName("DELETE saved show works as expected when the service returns an appropriate response")
     public void testDeleteSavedShowById() throws Exception {
 
-        Show sampleShow = new Show(1L, "test", "test",
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
 
         Mockito.when(showService.deleteShowFromDb(1L)).thenReturn("Success");

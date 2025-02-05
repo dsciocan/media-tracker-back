@@ -3,6 +3,7 @@ package com.duroc.mediatracker.service;
 import com.duroc.mediatracker.model.info.Episode;
 import com.duroc.mediatracker.model.info.Show;
 import com.duroc.mediatracker.model.user.AppUser;
+import com.duroc.mediatracker.model.user.UserEpisode;
 import com.duroc.mediatracker.model.user.UserShow;
 import com.duroc.mediatracker.model.user.UserShowId;
 import com.duroc.mediatracker.repository.ShowRepository;
@@ -37,55 +38,53 @@ class UserShowServiceTest {
     @Mock
     ShowService showService;
 
+    @Mock
+    UserEpisodeService userEpisodeService;
+
     @InjectMocks
     UserShowServiceImplementation userShowService;
 
     @Test
     void getAllShowsFromUserList() {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", LocalDate.now(), null);
         List<UserShow> sampleList = List.of(userShow);
-        Mockito.when(userService.getUserById(1L)).thenReturn(user);
+        Mockito.when(userService.getUser()).thenReturn(user);
         Mockito.when(userShowRepository.findByUserShowIdAppUser(user)).thenReturn(sampleList);
-        assertEquals(sampleList, userShowService.getAllShowsFromUserList(1L));
+        assertEquals(sampleList, userShowService.getAllShowsFromUserList());
 
     }
 
     @Test
     void saveShowToUserList() throws IOException, InterruptedException {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(null, 5, "Note 1", "watched", null, null);
         UserShow expected = new UserShow(userShowId, 5, "Note 1", "watched", LocalDate.now(), LocalDate.now());
-        Mockito.when(userService.getUserById(1L)).thenReturn(user);
+        Mockito.when(userService.getUser()).thenReturn(user);
         Mockito.when(showService.saveShowDetails(123L)).thenReturn(sampleShow);
         Mockito.when(userShowRepository.save(userShow)).thenReturn(userShow);
-        assertEquals(expected, userShowService.saveShowToUserList(userShow, 1L, 123L));
+        Mockito.when(userEpisodeService.saveAllShowEpisodesAsUserEpisodes(1L)).thenReturn(List.of(new UserEpisode()));
+        assertEquals(expected, userShowService.saveShowToUserList(userShow,  123L));
 
     }
 
     @Test
     void getUserShowByShowId() {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
-                2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
+                2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of());
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(userShowId, 5, "Note 1", "watched", LocalDate.now(), LocalDate.now());
-        Mockito.when(userService.getUserById(1L)).thenReturn(user);
+        Mockito.when(userService.getUser()).thenReturn(user);
         Mockito.when(showService.getSavedShow(1L)).thenReturn(sampleShow);
         Mockito.when(userShowRepository.findById(userShowId)).thenReturn(Optional.of(userShow));
-        assertEquals(userShow, userShowService.getUserShowByShowId(1L, 1L));
+        assertEquals(userShow, userShowService.getUserShowByShowId(1L));
     }
 
     @Test
@@ -104,18 +103,16 @@ class UserShowServiceTest {
 
     @Test
     void getUserShowsByWatchStatusAndOptionalGenre() {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(userShowId, 5, "Note 1", "watched", LocalDate.now(), LocalDate.now());
-        Show sampleShow2 = new Show(1L, "test2", "test2",
+        Show sampleShow2 = new Show(1L, 1L, "test2", "test2",
                 2000, 2020, true, "Test",  List.of("action"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId2 = new UserShowId(user, sampleShow2);
         UserShow userShow2 = new UserShow(userShowId2, 5, "Note 1", "watching", LocalDate.now(), null);
-        Show sampleShow3 = new Show(1L, "test3", "test2",
+        Show sampleShow3 = new Show(1L, 1L, "test3", "test2",
                 2000, 2020, true, "Test",  List.of("action"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId3 = new UserShowId(user, sampleShow3);
         UserShow userShow3 = new UserShow(userShowId3, 5, "Note 1", "watched", LocalDate.now(), null);
@@ -126,22 +123,20 @@ class UserShowServiceTest {
         List<UserShow> expected2 = List.of(userShow, userShow3);
         List<UserShow> expected3 = List.of(userShow3);
 
-        Mockito.when(userShowService.getAllShowsFromUserList(1L)).thenReturn(allShowsList);
+        Mockito.when(userShowService.getAllShowsFromUserList()).thenReturn(allShowsList);
 
         assertAll( () -> {
-                    assertEquals(expected1, userShowService.getUserShowsByWatchStatusAndOptionalGenre(1L, "watching", null));
-                    assertEquals(expected2, userShowService.getUserShowsByWatchStatusAndOptionalGenre(1L, "watched", null));
-                    assertEquals(expected3, userShowService.getUserShowsByWatchStatusAndOptionalGenre(1L, "watched", "action"));
+                    assertEquals(expected1, userShowService.getUserShowsByWatchStatusAndOptionalGenre("watching", null));
+                    assertEquals(expected2, userShowService.getUserShowsByWatchStatusAndOptionalGenre("watched", null));
+                    assertEquals(expected3, userShowService.getUserShowsByWatchStatusAndOptionalGenre("watched", "action"));
                 }
         );
     }
 
     @Test
     void changeUserShowDetails() {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String uid = token.getUid();
-        AppUser user = new AppUser(1L, uid);
-        Show sampleShow = new Show(1L, "test", "test",
+        AppUser user = new AppUser(1L, "1234");
+        Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
         UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", LocalDate.now(), LocalDate.now());
@@ -149,14 +144,14 @@ class UserShowServiceTest {
 
         UserShow expected = new UserShow(userShowId, 4, "Different note", "Watched", LocalDate.now(), LocalDate.now());
 
-        Mockito.when(userService.getUserById(1L)).thenReturn(user);
+        Mockito.when(userService.getUser()).thenReturn(user);
         Mockito.when(showService.getSavedShow(1L)).thenReturn(sampleShow);
         Mockito.when(userShowRepository.findById(userShowId)).thenReturn(Optional.of(userShow));
-        System.out.println(userShowService.getUserShowByShowId(1L, 1L));
+        System.out.println(userShowService.getUserShowByShowId(1L));
         Mockito.when(userShowRepository.save(userShow)).thenReturn(userShow);
 
 
-        assertEquals(expected, userShowService.changeUserShowDetails(1L, 1L, newShow));
+        assertEquals(expected, userShowService.changeUserShowDetails(1L, newShow));
 
     }
 }
