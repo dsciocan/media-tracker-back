@@ -21,9 +21,11 @@ public class Show {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long tmdbId;
+
     private String title;
 
-    @Lob
+    @Column(length = 2000)
     private String synopsis;
 
     private int releaseYear;
