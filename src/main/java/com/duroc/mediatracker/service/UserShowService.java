@@ -18,4 +18,6 @@ public interface UserShowService {
     UserShow changeUserShowDetails(Long showId, UserShow newUserShow);
 
     HashMap<String, Integer> getNumberOfShowsWatchedByGenre();
+
+    boolean isUserShowAlreadySaved(Long tmdbId);
 }

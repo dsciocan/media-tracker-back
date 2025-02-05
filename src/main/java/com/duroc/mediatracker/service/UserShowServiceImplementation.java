@@ -147,4 +147,15 @@ public class UserShowServiceImplementation implements  UserShowService {
         return showsByGenre;
     }
 
+    @Override
+    public boolean isUserShowAlreadySaved(Long tmdbId) {
+        AppUser user = userService.getUser();
+        Show show = showService.getShowByTmdbId(tmdbId);
+        UserShowId userShowId = new UserShowId();
+        userShowId.setAppUser(user);
+        userShowId.setShow(show);
+
+        return userShowRepository.existsById(userShowId);
+    }
+
 }

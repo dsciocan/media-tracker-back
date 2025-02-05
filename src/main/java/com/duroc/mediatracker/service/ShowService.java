@@ -19,4 +19,6 @@ public interface ShowService {
     Show saveShowDetails(Long apiId) throws IOException, InterruptedException;
     Show getSavedShow(Long id);
     String deleteShowFromDb(Long id);
+
+    Show getShowByTmdbId(Long tmdbId);
 }

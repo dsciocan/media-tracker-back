@@ -82,6 +82,7 @@ public class ShowServiceImplementation implements ShowService {
         }
         boolean isComplete = !showDetails.isIn_production();
         Show savedShow = Show.builder()
+                .tmdbId(apiId)
                 .title(showDetails.getName())
                 .synopsis(showDetails.getOverview())
                 .releaseYear(Integer.parseInt(showDetails.getFirst_air_date().substring(0,4)))
@@ -119,6 +120,15 @@ public class ShowServiceImplementation implements ShowService {
             return "Success";
         } else {
             return "Show with specified id could not be found";
+        }
+    }
+
+    @Override
+    public Show getShowByTmdbId(Long tmdbId) {
+        if(!showRepository.findShowByTmdbId(tmdbId).isEmpty()) {
+            return showRepository.findShowByTmdbId(tmdbId).getFirst();
+        } else {
+            return null;
         }
     }
 
