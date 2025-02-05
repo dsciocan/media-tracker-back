@@ -38,18 +38,8 @@ public class UserController {
     @Autowired
     UserFilmService userFilmService;
 
-    /**
-     * todo:
-     *      S̶p̶r̶i̶n̶g̶ S̶e̶c̶u̶r̶i̶t̶y̶ s̶e̶t̶ u̶p̶ f̶o̶r̶ t̶h̶e̶ "u̶s̶e̶r̶" e̶n̶d̶p̶o̶i̶n̶t̶
-     *      (Potentially) refactor Show and Film endpoint('s) for user specified things:
-     *         - move them to the User Controller
-     *      F̶i̶l̶t̶e̶r̶ f̶o̶r̶ t̶h̶e̶ e̶n̶d̶p̶o̶i̶n̶t̶ t̶h̶a̶t̶ c̶a̶n̶ b̶e̶ a̶p̶p̶l̶i̶e̶d̶ t̶o̶ S̶p̶r̶i̶n̶g̶ S̶e̶c̶u̶r̶i̶t̶y̶
-     *      Specific endpoint for adding a User to the database (eg: they just signed up) -> something like authenticateUserIsInDatabase
-     *          - + all logic that comes with that (Service, Repo, Tests etc..)
-     */
 
-
-    // Ths is an example of how an endpoint can look like for receiving a token from the client and checking the user in the db
+    //User specific endpoints
 
     @GetMapping("/auth")
     public ResponseEntity<AppUser> authenticateUserIsInDatabase() {
@@ -61,26 +51,13 @@ public class UserController {
     }
 
 
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<AppUser> getUserById(@PathVariable Long userId) {
-//        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
-//    }
-
-//    @PostMapping("/save")
-//    public ResponseEntity<AppUser> saveUser(@RequestBody AppUser appUser) {
-//        return new ResponseEntity<>(userService.saveUser(appUser), HttpStatus.OK);
-//    }
-
-//    @PatchMapping("/{userId}")
-//    public ResponseEntity<AppUser> changeUsername(@PathVariable Long userId, @RequestBody String newUsername) {
-//        return new ResponseEntity<>(userService.changeUsername(userId, newUsername), HttpStatus.OK);
-//    }
-
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser() {
         return new ResponseEntity<>(userService.deleteUser(), HttpStatus.OK);
     }
 
+
+    //UserShow endpoints
     @GetMapping("/shows/")
     public ResponseEntity<List<UserShow>> getShowsFromUserList() throws IOException, InterruptedException {
         return new ResponseEntity<>(userShowService.getAllShowsFromUserList(), HttpStatus.OK);
@@ -108,7 +85,13 @@ public class UserController {
         return new ResponseEntity<>(userShowService.changeUserShowDetails(showId, newUserShow), HttpStatus.OK);
     }
 
+    @GetMapping("/show/{tmdbId}/isSaved")
+    public ResponseEntity<Boolean> getShowSavedStatus(@PathVariable Long tmdbId) {
+        return new ResponseEntity<>(userShowService.isUserShowAlreadySaved(tmdbId), HttpStatus.OK);
+    }
 
+
+    //UserShow/UserEpisode endpoints
     @GetMapping("/shows/{showId}/episodes")
     public ResponseEntity<List<UserEpisode>> getUserEpisodeListByShowId(@PathVariable Long showId) {
         return new ResponseEntity<>(userEpisodeService.getUserEpisodeListByShowId(showId), HttpStatus.OK);
@@ -165,6 +148,13 @@ public class UserController {
         return new ResponseEntity<>(userFilms, HttpStatus.OK);
     }
 
+    @GetMapping("/film/{tmdbId}/isSaved")
+    public ResponseEntity<Boolean> getFilmSavedStatus(@PathVariable Long tmdbId) {
+        return new ResponseEntity<>(userFilmService.isUserFilmAlreadySaved(tmdbId), HttpStatus.OK);
+    }
+
+
+    //Stats endpoints
     @GetMapping("/totalWatchedRuntime")
     public ResponseEntity<Integer> getTotalWatchedRuntime() {
         Integer totalRuntime = userService.totalRuntime();
@@ -177,8 +167,5 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllByGenre(),HttpStatus.OK);
     }
 
-    @GetMapping("/film/{tmdbId}/isSaved")
-    public ResponseEntity<Boolean> getSavedStatus(@PathVariable Long tmdbId) {
-        return new ResponseEntity<>(userFilmService.isUserFilmAlreadySaved(tmdbId), HttpStatus.OK);
-    }
+
 }

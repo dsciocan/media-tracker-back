@@ -1,5 +1,6 @@
 package com.duroc.mediatracker.controller;
 
+import com.duroc.mediatracker.model.info.Film;
 import com.duroc.mediatracker.model.info.Show;
 import com.duroc.mediatracker.model.show_detail.ShowDetails;
 import com.duroc.mediatracker.model.show_search.Result;
@@ -30,11 +31,6 @@ public class ShowController {
         return new ResponseEntity<>(showDetails, HttpStatus.OK);
     }
 
-//    @GetMapping("/details2/{id}")
-//    public ResponseEntity<Show> getShowDetails2(@PathVariable Long id) throws IOException, InterruptedException {
-//        Show showDetails = showService.getShowDetails2(id);
-//        return new ResponseEntity<>(showDetails, HttpStatus.OK);
-//    }
 
     @PostMapping("/save")
     public ResponseEntity<Show> saveShowDetails(@RequestBody Long id) throws IOException, InterruptedException {
@@ -51,5 +47,10 @@ public class ShowController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteShow(@PathVariable Long id) {
         return new ResponseEntity<>(showService.deleteShowFromDb(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/saved/tmdb={tmdbId}")
+    public ResponseEntity<Show> getShowByTmdbId(@PathVariable Long tmdbId) {
+        return new ResponseEntity<>(showService.getShowByTmdbId(tmdbId), HttpStatus.OK);
     }
 }
