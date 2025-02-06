@@ -1,5 +1,6 @@
 package com.duroc.mediatracker.model.info;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,7 @@ public class Show {
 
     @OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @JsonIgnore
     private List<Episode> episodes;
 
 }
