@@ -22,7 +22,7 @@ public class FirebaseInitialization {
         // Get the Firebase verification details from the firebase -adminsdk Key Json (maybe change the name(?)-> but I think its a non issue )
         try{
             FileInputStream serviceAccount =
-                    new FileInputStream("src/main/resources/project-media-tracker-firebase-adminsdk-2wn5h-e3ec6e55fb.json");
+                    new FileInputStream("./project-media-tracker-firebase-adminsdk-2wn5h-e3ec6e55fb.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))

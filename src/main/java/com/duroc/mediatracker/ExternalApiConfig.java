@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class ExternalApiConfig {
     private Properties properties;
-    private final String configFilePath = "src/main/resources/api.properties";
+    private final String configFilePath = "./api.properties";
 
     public ExternalApiConfig() {
         File ConfigFile = new File(configFilePath);
