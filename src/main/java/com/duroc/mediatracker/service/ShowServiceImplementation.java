@@ -42,36 +42,6 @@ public class ShowServiceImplementation implements ShowService {
        return showDetails;
     }
 
-//    @Override
-//    public Show getShowDetails2(Long id) throws IOException, InterruptedException {
-//        ShowDetails showDetails =  ShowDAO.requestShowDetails(id);
-//        String url = "https://image.tmdb.org/t/p/original" + showDetails.getPoster_path();
-//        showDetails.setPoster_path(url);
-//        List<TvGenres> showGenres = new ArrayList<>();
-//        for(Genre genre : showDetails.getGenres()) {
-//            for(TvGenres tvGenre : TvGenres.values()) {
-//                if(Objects.equals(tvGenre.getName(), genre.name())) {
-//                    showGenres.add(tvGenre);
-//                }
-//
-//            }
-//        }
-//        Show savedShow = Show.builder()
-//                .title(showDetails.getName())
-//                .synopsis(showDetails.getOverview())
-//                .releaseYear(Integer.parseInt(showDetails.getFirst_air_date().substring(0,4)))
-//                .finishedYear(Integer.parseInt(showDetails.getLast_air_date().substring(0,4)))
-//                .isComplete(!showDetails.isIn_production())
-//                .posterUrl(showDetails.getPoster_path())
-//                .genres(showGenres)
-//                .numberOfSeasons(showDetails.getNumber_of_seasons())
-//                .numberOfEpisodes(showDetails.getNumber_of_episodes())
-//                .country(showDetails.getOrigin_country().getFirst())
-//                .language(showDetails.getOriginal_language())
-//                .build();
-//        savedShow.setEpisodes(episodeService.getAllEpisodes2(showDetails.getId(), savedShow.getNumberOfSeasons()));
-//        return savedShow;
-//    }
 
     @Override
     public Show saveShowDetails(Long apiId) throws IOException, InterruptedException {
@@ -86,7 +56,6 @@ public class ShowServiceImplementation implements ShowService {
                 .title(showDetails.getName())
                 .synopsis(showDetails.getOverview())
                 .releaseYear(Integer.parseInt(showDetails.getFirst_air_date().substring(0,4)))
-                .finishedYear(Integer.parseInt(showDetails.getLast_air_date().substring(0,4)))
                 .isComplete(isComplete)
                 .posterUrl(showDetails.getPoster_path())
                 .genres(showGenres)
@@ -95,6 +64,9 @@ public class ShowServiceImplementation implements ShowService {
                 .country(showDetails.getOrigin_country().getFirst())
                 .language(showDetails.getOriginal_language())
                 .build();
+        if(showDetails.getLast_air_date() !=  null) {
+            savedShow.setFinishedYear(Integer.parseInt(showDetails.getLast_air_date().substring(0,4)));
+        }
         showRepository.save(savedShow);
         episodeService.saveEpisodes(showDetails.getId(), savedShow.getNumberOfSeasons(), savedShow);
         List<Episode> episodeList = episodeService.getSavedEpisodesByShowId(savedShow.getId());
