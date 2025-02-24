@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 public interface UserEpisodeRepository extends JpaRepository<UserEpisode, UserEpisodeId> {
     List<UserEpisode> findByUserEpisodeIdAppUser(AppUser user);
-
+    List<UserEpisode> findByShowId(Long showId);
 }
