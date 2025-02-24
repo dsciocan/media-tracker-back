@@ -14,4 +14,6 @@ public interface UserEpisodeService {
     UserEpisode changeUserEpisodeDetails(Long episodeId, UserEpisode newUserEpisode);
 
     int getAllRuntimeWatched();
+
+    UserEpisode getMostRecentEpisode(Long showId);
 }
