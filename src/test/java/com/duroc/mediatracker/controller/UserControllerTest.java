@@ -41,49 +41,25 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper mapper;
 
     @BeforeEach
     public void setup(){
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-        mapper = new ObjectMapper();
     }
 
     @Test
     void getUser() throws Exception {
-//        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String uid = token.getUid();
         AppUser user = new AppUser(1L, "1244");
 
         Mockito.when(userService.getUser()).thenReturn(user);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/v1/mediatracker/users/auth"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.oAuthId").value(34459880L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(status().isOk()
                 );
     }
 
-//    @Test
-//    void changeUsername() throws Exception {
-//        Long userId = 1L;
-//        String username = "username";
-//        Long oAuthId = 1L;
-//        AppUser user = AppUser.builder().id(userId).username(username).oAuthId(oAuthId).build();
-//
-//        when(userService.changeUsername(userId, username)).thenReturn(user);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/mediatracker/users/{userId}", userId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(username))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.id").value(userId))
-//                .andExpect(jsonPath("$.username").value(username));
-//
-//        verify(userService).changeUsername(userId, username);
-//    }
 
     @Test
     void deleteUser() throws Exception {

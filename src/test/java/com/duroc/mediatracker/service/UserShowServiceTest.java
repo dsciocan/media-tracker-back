@@ -50,7 +50,7 @@ class UserShowServiceTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", LocalDate.now(), null);
+        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", 0, LocalDate.now(), null);
         List<UserShow> sampleList = List.of(userShow);
         Mockito.when(userService.getUser()).thenReturn(user);
         Mockito.when(userShowRepository.findByUserShowIdAppUser(user)).thenReturn(sampleList);
@@ -64,8 +64,8 @@ class UserShowServiceTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(null, 5, "Note 1", "watched", null, null);
-        UserShow expected = new UserShow(userShowId, 5, "Note 1", "watched", LocalDate.now(), LocalDate.now());
+        UserShow userShow = new UserShow(null, 5, "Note 1", "watched", 200, null, null);
+        UserShow expected = new UserShow(userShowId, 5, "Note 1", "watched", 200, LocalDate.now(), LocalDate.now());
         Mockito.when(userService.getUser()).thenReturn(user);
         Mockito.when(showService.saveShowDetails(123L)).thenReturn(sampleShow);
         Mockito.when(userShowRepository.save(userShow)).thenReturn(userShow);
@@ -80,7 +80,7 @@ class UserShowServiceTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of());
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "watched", LocalDate.now(), LocalDate.now());
+        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "watched", 200, LocalDate.now(), LocalDate.now());
         Mockito.when(userService.getUser()).thenReturn(user);
         Mockito.when(showService.getSavedShow(1L)).thenReturn(sampleShow);
         Mockito.when(userShowRepository.findById(userShowId)).thenReturn(Optional.of(userShow));
@@ -107,15 +107,15 @@ class UserShowServiceTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "watched", LocalDate.now(), LocalDate.now());
+        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "watched", 200, LocalDate.now(), LocalDate.now());
         Show sampleShow2 = new Show(1L, 1L, "test2", "test2",
                 2000, 2020, true, "Test",  List.of("action"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId2 = new UserShowId(user, sampleShow2);
-        UserShow userShow2 = new UserShow(userShowId2, 5, "Note 1", "watching", LocalDate.now(), null);
+        UserShow userShow2 = new UserShow(userShowId2, 5, "Note 1", "watching", 3, LocalDate.now(), null);
         Show sampleShow3 = new Show(1L, 1L, "test3", "test2",
                 2000, 2020, true, "Test",  List.of("action"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId3 = new UserShowId(user, sampleShow3);
-        UserShow userShow3 = new UserShow(userShowId3, 5, "Note 1", "watched", LocalDate.now(), null);
+        UserShow userShow3 = new UserShow(userShowId3, 5, "Note 1", "watched", 200, LocalDate.now(), null);
 
         List<UserShow> allShowsList = List.of(userShow, userShow2, userShow3);
 
@@ -139,10 +139,10 @@ class UserShowServiceTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", LocalDate.now(), LocalDate.now());
-        UserShow newShow = new UserShow(null, 4, "Different note", "Watched", null, null);
+        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", 0,LocalDate.now(), LocalDate.now());
+        UserShow newShow = new UserShow(null, 4, "Different note", "Watched", 200, null, null);
 
-        UserShow expected = new UserShow(userShowId, 4, "Different note", "Watched", LocalDate.now(), LocalDate.now());
+        UserShow expected = new UserShow(userShowId, 4, "Different note", "Watched", 200, LocalDate.now(), LocalDate.now());
 
         Mockito.when(userService.getUser()).thenReturn(user);
         Mockito.when(showService.getSavedShow(1L)).thenReturn(sampleShow);

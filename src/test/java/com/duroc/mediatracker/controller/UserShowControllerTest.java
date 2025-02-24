@@ -60,7 +60,7 @@ class UserShowControllerTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", LocalDate.now(), null);
+        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", 0, LocalDate.now(), null);
         List<UserShow> sampleList = List.of(userShow);
 
         Mockito.when(userShowService.getAllShowsFromUserList()).thenReturn(sampleList);
@@ -78,7 +78,7 @@ class UserShowControllerTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", null, null);
+        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", 0, null, null);
         String json = mapper.writeValueAsString(userShow);
 
         Mockito.when(userShowService.saveShowToUserList(userShow,  123L)).thenReturn(userShow);
@@ -95,7 +95,7 @@ class UserShowControllerTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", null, null);
+        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", 0, null, null);
 
         Mockito.when(userShowService.getUserShowByShowId(1L)).thenReturn(userShow);
 
@@ -112,7 +112,7 @@ class UserShowControllerTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", null, null);
+        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", 0, null, null);
         List<UserShow> sampleList = List.of(userShow);
 
         Mockito.when(userShowService.getUserShowsByWatchStatusAndOptionalGenre("Watching", "genre")).thenReturn(sampleList);
@@ -130,10 +130,10 @@ class UserShowControllerTest {
         Show sampleShow = new Show(1L, 1L, "test", "test",
                 2000, 2020, true, "Test",  List.of("genre"), 10, 200, "US", "en", List.of(new Episode()));
         UserShowId userShowId = new UserShowId(user, sampleShow);
-        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", null, null);
-        UserShow newShow = new UserShow(null, 4, "Different note", "Watched", null, null);
+        UserShow userShow = new UserShow(userShowId, 5, "Note 1", "Watching", 0,  null, null);
+        UserShow newShow = new UserShow(null, 4, "Different note", "Watched", 200, null, null);
 
-        UserShow resultShow = new UserShow(userShowId, 4, "Different note", "Watched", LocalDate.now(), LocalDate.now());
+        UserShow resultShow = new UserShow(userShowId, 4, "Different note", "Watched", 200, LocalDate.now(), LocalDate.now());
 
         String json = mapper.writeValueAsString(newShow);
 
