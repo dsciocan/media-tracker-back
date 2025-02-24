@@ -8,6 +8,7 @@ import com.duroc.mediatracker.service.UserShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -85,11 +86,6 @@ public class UserController {
         return new ResponseEntity<>(userShowService.changeUserShowDetails(showId, newUserShow), HttpStatus.OK);
     }
 
-    @GetMapping("/show/{tmdbId}/isSaved")
-    public ResponseEntity<Boolean> getShowSavedStatus(@PathVariable Long tmdbId) {
-        return new ResponseEntity<>(userShowService.isUserShowAlreadySaved(tmdbId), HttpStatus.OK);
-    }
-
 
     //UserShow/UserEpisode endpoints
     @GetMapping("/shows/{showId}/episodes")
@@ -102,10 +98,15 @@ public class UserController {
         return new ResponseEntity<>(userEpisodeService.getUserEpisodeByEpisodeId(episodeId), HttpStatus.OK);
     }
 
-    @PutMapping("/episode/{episodeId}")
+    @PatchMapping("/episode/{episodeId}")
     public ResponseEntity<UserEpisode> changeUserEpisodeDetails(@PathVariable Long episodeId,
                                                                 @RequestBody UserEpisode newUserEpisode) {
         return new ResponseEntity<>(userEpisodeService.changeUserEpisodeDetails(episodeId, newUserEpisode), HttpStatus.OK);
+    }
+
+    @GetMapping("/shows/{showId}/latest")
+    public ResponseEntity<UserEpisode> getLatestUserEpisode(@PathVariable Long showId) {
+        return new ResponseEntity<>(userEpisodeService.getMostRecentEpisode(showId), HttpStatus.OK);
     }
 
     // UserFilm methods
