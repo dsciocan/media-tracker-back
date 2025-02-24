@@ -4,6 +4,7 @@ import com.duroc.mediatracker.Exception.InvalidItemException;
 import com.duroc.mediatracker.Exception.ItemNotFoundException;
 import com.duroc.mediatracker.model.info.Show;
 import com.duroc.mediatracker.model.user.AppUser;
+import com.duroc.mediatracker.model.user.UserEpisode;
 import com.duroc.mediatracker.model.user.UserShow;
 import com.duroc.mediatracker.model.user.UserShowId;
 import com.duroc.mediatracker.repository.ShowRepository;
@@ -51,12 +52,15 @@ public class UserShowServiceImplementation implements  UserShowService {
         userShow.setUserShowId(userShowId);
         if(userShow.getStatus().equalsIgnoreCase("Watching")) {
             userShow.setDateStarted(LocalDate.now());
+            userShow.setEpisodesWatched(0);
         } else if(userShow.getStatus().equalsIgnoreCase("Watched")) {
             userShow.setDateStarted(LocalDate.now());
             userShow.setDateCompleted(LocalDate.now());
+            userShow.setEpisodesWatched(show.getNumberOfEpisodes());
         }
+        userShowRepository.save(userShow);
         userEpisodeService.saveAllShowEpisodesAsUserEpisodes(show.getId());
-        return userShowRepository.save(userShow);
+        return userShow;
     }
 
 
@@ -107,20 +111,34 @@ public class UserShowServiceImplementation implements  UserShowService {
     @Override
     public UserShow changeUserShowDetails(Long showId, UserShow newUserShow) {
         UserShow userShow = getUserShowByShowId(showId);
+        List<UserEpisode> userEpisodes = userEpisodeService.getUserEpisodeListByShowId(userShow.getUserShowId().getShow().getId());
         if(newUserShow.getUserShowId() == null) {
             newUserShow.setUserShowId(userShow.getUserShowId());
         }
-        if(!Objects.equals(newUserShow.getUserShowId(), userShow.getUserShowId())) {
-            throw new InvalidItemException("User and Show properties are not changeable");
-        } else if(newUserShow.getStatus() == null) {
+//        if(!Objects.equals(newUserShow.getUserShowId(), userShow.getUserShowId())) {
+//            throw new InvalidItemException("User and Show properties are not changeable");
+//        } else
+            if(newUserShow.getStatus() == null) {
             throw new InvalidItemException("Show must have a status on the user's list");
         } else {
             userShow.setNotes(newUserShow.getNotes());
+            userShow.setEpisodesWatched(newUserShow.getEpisodesWatched());
             if(newUserShow.getStatus().equalsIgnoreCase("Watching") && !userShow.getStatus().equalsIgnoreCase("Watching")) {
                 userShow.setDateStarted(LocalDate.now());
             }
             if(newUserShow.getStatus().equalsIgnoreCase("Watched") && !userShow.getStatus().equalsIgnoreCase("Watched")) {
                 userShow.setDateCompleted(LocalDate.now());
+                for(UserEpisode ep : userEpisodes) {
+                    ep.setWatched(true);
+                    userEpisodeService.changeUserEpisodeDetails(ep.getUserEpisodeId().getEpisode().getId(), ep);
+                }
+                userShow.setEpisodesWatched(userShow.getUserShowId().getShow().getNumberOfEpisodes());
+            }
+            if(userShow.getStatus().equalsIgnoreCase("WATCHED") && !newUserShow.getStatus().equalsIgnoreCase("WATCHED")) {
+                for(UserEpisode ep : userEpisodes) {
+                    ep.setWatched(false);
+                    userEpisodeService.changeUserEpisodeDetails(ep.getUserEpisodeId().getEpisode().getId(), ep);
+                }
             }
             userShow.setStatus(newUserShow.getStatus());
             userShow.setRating(newUserShow.getRating());
@@ -157,5 +175,6 @@ public class UserShowServiceImplementation implements  UserShowService {
 
         return userShowRepository.existsById(userShowId);
     }
+
 
 }
