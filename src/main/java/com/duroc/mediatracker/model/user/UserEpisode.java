@@ -1,6 +1,8 @@
 package com.duroc.mediatracker.model.user;
 
 
+import com.duroc.mediatracker.model.info.Show;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,8 +30,8 @@ public class UserEpisode {
 
     private LocalDate watchedDate;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    @JoinColumn(name = "show_tv_id")
-//    private UserShow userShow;
+    @ManyToOne
+    @JoinColumn(name = "show_id")
+    @JsonIgnore
+    private Show show;
 }
