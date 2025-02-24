@@ -28,7 +28,7 @@
 
 ### Entity Relationship Diagram
 *The relation of the tables and there data to each other in the postgres database.*
-![Entity Relationship Diagram](./img/Entity%20Relationship%20Diagram.jpg)
+![Entity Relationship Diagram](./img/Entity_Relationship_Diagram.jpg)
 
 
 ---
