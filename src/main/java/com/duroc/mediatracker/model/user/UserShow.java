@@ -26,6 +26,8 @@ public class UserShow {
 
     private String status;
 
+    private Integer episodesWatched;
+
     private LocalDate dateStarted;
 
     private LocalDate dateCompleted;
